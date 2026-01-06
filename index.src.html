@@ -348,7 +348,17 @@
       border-radius: 4px;
       font-size: 0.8rem;
       color: var(--text);
-      user-select: all;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .ai-tip code:hover {
+      background: var(--border);
+    }
+
+    .ai-tip code.copied {
+      background: var(--success);
+      color: white;
     }
 
     .tips {
@@ -771,6 +781,17 @@
         btn.addEventListener('click', () => {
           const text = btn.getAttribute('data-copy') || btn.previousElementSibling.textContent;
           copyToClipboard(text, btn);
+        });
+      });
+
+      // AI tip copy
+      document.querySelector('.ai-tip code').addEventListener('click', function() {
+        const text = this.textContent;
+        navigator.clipboard.writeText(text).then(() => {
+          this.classList.add('copied');
+          setTimeout(() => {
+            this.classList.remove('copied');
+          }, 2000);
         });
       });
 
