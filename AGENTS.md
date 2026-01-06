@@ -12,13 +12,19 @@ index.html      # Minified output (generated, do not edit)
 **Always minify before committing:**
 
 ```bash
-npx html-minifier-terser --collapse-whitespace --remove-comments --minify-css --minify-js -o index.html index.src.html
+minhtml --minify-css --minify-js --output index.html index.src.html
 ```
 
-Or shorter:
+### Installing minhtml (Rust)
 
 ```bash
-npx html-minifier-terser -c -r --minify-css --minify-js -o index.html index.src.html
+cargo install minhtml
+```
+
+### Alternative (Node.js, no install needed)
+
+```bash
+npx html-minifier-terser --collapse-whitespace --remove-comments --minify-css --minify-js -o index.html index.src.html
 ```
 
 ## Rules
