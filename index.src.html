@@ -330,6 +330,55 @@
       animation: fadeIn 0.3s ease;
     }
 
+    .ai-tip {
+      margin-top: 1.5rem;
+      padding: 1rem;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      text-align: center;
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+    }
+
+    .ai-tip code {
+      font-family: var(--font-mono);
+      background: var(--code-bg);
+      padding: 0.2rem 0.5rem;
+      border-radius: 4px;
+      font-size: 0.8rem;
+      color: var(--text);
+      user-select: all;
+    }
+
+    .tips {
+      margin-top: 1.5rem;
+      padding: 1rem;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+    }
+
+    .tips ul {
+      list-style: none;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem 1.5rem;
+      justify-content: center;
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+    }
+
+    .tips li::before {
+      content: "✓ ";
+      color: var(--success);
+    }
+
+    .tips code {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+    }
+
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(-10px); }
       to { opacity: 1; transform: translateY(0); }
@@ -511,6 +560,9 @@
             </div>
           </div>
         </div>
+        <div class="ai-tip">
+          <span data-i18n="aiTip">Using AI? Just paste:</span> <code>Update README.md to use https://install.cat</code>
+        </div>
       </div>
     </section>
 
@@ -539,6 +591,12 @@
               <p data-i18n="step3Desc">We fetch the script from your repo and pipe it to the shell. Zero config.</p>
             </div>
           </div>
+        </div>
+        <div class="tips">
+          <ul>
+            <li><span data-i18n="tip1">No need to add</span> <code>https://</code></li>
+            <li><span data-i18n="tip2">No need to add</span> <code>.sh</code> <span data-i18n="tip2b">or</span> <code>.ps1</code></li>
+          </ul>
         </div>
       </div>
     </section>
@@ -572,6 +630,10 @@
         step2Desc: 'Tell your users to run the one-liner for their platform',
         step3Title: "That's it!",
         step3Desc: 'We fetch the script from your repo and pipe it to the shell. Zero config.',
+        aiTip: 'Using AI? Just paste:',
+        tip1: 'No need to add',
+        tip2: 'No need to add',
+        tip2b: 'or',
         footer: 'Made with',
         footerBy: 'by'
       },
@@ -595,6 +657,10 @@
         step2Desc: 'Diga aos seus usuários para rodar o one-liner da plataforma deles',
         step3Title: 'É isso!',
         step3Desc: 'Buscamos o script do seu repo e passamos pro shell. Zero config.',
+        aiTip: 'Usando IA? Só colar:',
+        tip1: 'Não precisa adicionar',
+        tip2: 'Não precisa adicionar',
+        tip2b: 'ou',
         footer: 'Feito com',
         footerBy: 'por'
       },
@@ -618,6 +684,10 @@
         step2Desc: "Digues als teus usuaris que executin el one-liner per a la seva plataforma",
         step3Title: 'Això és tot!',
         step3Desc: "Obtenim l'script del teu repo i el passem al shell. Zero config.",
+        aiTip: 'Utilitzes IA? Només enganxa:',
+        tip1: 'No cal afegir',
+        tip2: 'No cal afegir',
+        tip2b: 'o',
         footer: 'Fet amb',
         footerBy: 'per'
       }
