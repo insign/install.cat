@@ -917,6 +917,33 @@
         footer: '作成：',
         footerBy: ''
       },
+      ko: {
+        star: 'Star',
+        heroTitle: '모든 CLI를 설치하세요',
+        heroAccent: '단 하나의 명령으로',
+        tagline: 'curl만 하면 됩니다. 패키지 매니저 필요 없어요.',
+        exampleIntro: '예시: 설치 중',
+        copy: '복사',
+        copied: '복사됨!',
+        generatorTitle: '직접 사용해보기',
+        generatorDesc: 'GitHub 사용자명/repo를 입력하여 설치 명령 생성',
+        generate: '생성',
+        howTitle: '작동 방식',
+        step1Title: 'repo에 install scripts 추가',
+        step1Desc: '생성',
+        step1Desc2: 'Linux/macOS용과',
+        step1Desc3: 'Windows용을 main branch에',
+        step2Title: 'install 명령 공유',
+        step2Desc: '사용자에게 해당 플랫폼용 one-liner를 실행하도록 안내',
+        step3Title: '끝!',
+        step3Desc: 'repo에서 script를 가져와 shell로 전달합니다. Zero config.',
+        aiTip: 'AI 사용 중? 그냥 붙여넣기:',
+        tip1: '추가할 필요 없음',
+        tip2: '추가할 필요 없음',
+        tip2b: '또는',
+        footer: '제작',
+        footerBy: ''
+      },
       mr: {
         star: 'Star',
         heroTitle: 'कोणतेही CLI इन्स्टॉल करा',
@@ -1057,7 +1084,7 @@
     function detectLanguage() {
       const lang = navigator.language || navigator.userLanguage || 'en';
       const shortLang = lang.split('-')[0].toLowerCase();
-      const supported = ['ar', 'bn', 'ca', 'de', 'en', 'es', 'fr', 'hi', 'id', 'ja', 'mr', 'pt', 'ru', 'sw', 'ur', 'zh'];
+      const supported = ['ar', 'bn', 'ca', 'de', 'en', 'es', 'fr', 'hi', 'id', 'ja', 'ko', 'mr', 'pt', 'ru', 'sw', 'ur', 'zh'];
       return supported.includes(shortLang) ? shortLang : 'en';
     }
 

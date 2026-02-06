@@ -44,7 +44,7 @@ npx html-minifier-terser --collapse-whitespace --remove-comments --minify-css --
 
 ## i18n
 
-The page supports 16 languages via auto-detection (covering the 15 most spoken languages globally + Catalan):
+The page supports 17 languages via auto-detection (covering the 15 most spoken languages globally + Catalan + Korean):
 
 - **ar** - Arabic (RTL) - 422M speakers
 - **bn** - Bengali - 273M speakers
@@ -56,6 +56,7 @@ The page supports 16 languages via auto-detection (covering the 15 most spoken l
 - **hi** - Hindi - 609M speakers
 - **id** - Indonesian - 199M speakers
 - **ja** - Japanese - 125M speakers
+- **ko** - Korean - 82M speakers
 - **mr** - Marathi - 99M speakers
 - **pt** - Portuguese - 264M speakers
 - **ru** - Russian - 255M speakers
