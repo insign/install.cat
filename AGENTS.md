@@ -44,9 +44,25 @@ npx html-minifier-terser --collapse-whitespace --remove-comments --minify-css --
 
 ## i18n
 
-The page supports 3 languages via auto-detection:
-- English (default/fallback)
-- Portuguese (pt-BR)
-- Catalan (ca)
+The page supports 16 languages via auto-detection (covering the 15 most spoken languages globally + Catalan):
+
+- **ar** - Arabic (RTL) - 422M speakers
+- **bn** - Bengali - 273M speakers
+- **ca** - Catalan (cultural inclusion)
+- **de** - German - 134M speakers
+- **en** - English (default/fallback) - 1.52B speakers
+- **es** - Spanish - 560M speakers
+- **fr** - French - 321M speakers
+- **hi** - Hindi - 609M speakers
+- **id** - Indonesian - 199M speakers
+- **ja** - Japanese - 125M speakers
+- **mr** - Marathi - 99M speakers
+- **pt** - Portuguese - 264M speakers
+- **ru** - Russian - 255M speakers
+- **sw** - Swahili - 100M speakers
+- **ur** - Urdu (RTL) - 232M speakers
+- **zh** - Mandarin Chinese - 1.14B speakers
+
+**RTL Support:** Arabic (ar) and Urdu (ur) automatically set `dir="rtl"` on the document root.
 
 All translatable strings use `data-i18n` attributes and are defined in the `translations` object in the `<script>` section.
