@@ -1130,11 +1130,20 @@
       return `<span class="syn-cmd">irm</span> <span class="syn-url">install.cat/${repo}</span> <span class="syn-pipe">|</span> <span class="syn-cmd">iex</span>`;
     }
 
+    function extractRepo(input) {
+      let clean = input.trim();
+      const match = clean.match(/github\.com[:/]([^/]+)\/([^/]+)/);
+      if (match) {
+        return `${match[1]}/${match[2]}`.replace(/\.git$/, '');
+      }
+      return clean.replace(/\.git$/, '').replace(/\/$/, '');
+    }
+
     function generateCommands(scroll = true) {
       const input = document.getElementById('repo-input').value.trim();
       if (!input) return;
 
-      const repo = input.replace(/^https?:\/\/github\.com\//, '').replace(/\/$/, '');
+      const repo = extractRepo(input);
       const unixCmd = `curl -fsSL install.cat/${repo} | sh`;
       const winCmd = `irm install.cat/${repo} | iex`;
 
