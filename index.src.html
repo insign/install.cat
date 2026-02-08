@@ -1141,7 +1141,12 @@
 
     function generateCommands(scroll = true) {
       const input = document.getElementById('repo-input').value.trim();
-      if (!input) return;
+      const container = document.getElementById('generated-commands');
+
+      if (!input) {
+        container.classList.remove('visible');
+        return;
+      }
 
       const repo = extractRepo(input);
       const unixCmd = `curl -fsSL install.cat/${repo} | sh`;
@@ -1152,7 +1157,6 @@
       document.getElementById('copy-unix').setAttribute('data-copy', unixCmd);
       document.getElementById('copy-win').setAttribute('data-copy', winCmd);
 
-      const container = document.getElementById('generated-commands');
       container.classList.add('visible');
 
       if (scroll) {
@@ -1187,6 +1191,7 @@
 
       // Generator
       document.getElementById('generate-btn').addEventListener('click', () => generateCommands(true));
+      document.getElementById('repo-input').addEventListener('input', () => generateCommands(false));
       document.getElementById('repo-input').addEventListener('keypress', e => {
         if (e.key === 'Enter') generateCommands(true);
       });
