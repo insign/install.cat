@@ -1149,6 +1149,15 @@
       return clean.replace(/\.git$/, '').replace(/\/$/, '');
     }
 
+    function debounce(func, wait) {
+      let timeout;
+      return function(...args) {
+        const context = this;
+        clearTimeout(timeout);
+        timeout = setTimeout(() => func.apply(context, args), wait);
+      };
+    }
+
     function generateCommands(scroll = true) {
       const input = document.getElementById('repo-input').value.trim();
       const container = document.getElementById('generated-commands');
@@ -1201,7 +1210,7 @@
 
       // Generator
       document.getElementById('generate-btn').addEventListener('click', () => generateCommands(true));
-      document.getElementById('repo-input').addEventListener('input', () => generateCommands(false));
+      document.getElementById('repo-input').addEventListener('input', debounce(() => generateCommands(false), 300));
       document.getElementById('repo-input').addEventListener('keypress', e => {
         if (e.key === 'Enter') generateCommands(true);
       });
