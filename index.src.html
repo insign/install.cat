@@ -1142,7 +1142,7 @@
 
     function extractRepo(input) {
       let clean = input.trim();
-      const match = clean.match(/^(?:https?:\/\/(?:www\.)?|git@)?github\.com[:/]([^/]+)\/([^/]+)/);
+      const match = clean.match(/(?:^|@|\/\/)(?:www\.)?github\.com[:/]([^/]+)\/([^/]+)/);
       if (match) {
         return `${match[1]}/${match[2]}`.replace(/\.git$/, '');
       }
