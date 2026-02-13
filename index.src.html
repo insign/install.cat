@@ -303,6 +303,17 @@
       border-color: var(--accent);
     }
 
+    .generator-form input.invalid {
+      border-color: var(--syn-cmd);
+      animation: shake 0.5s;
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-5px); }
+      75% { transform: translateX(5px); }
+    }
+
     .generator-form button {
       padding: 0.75rem 1.5rem;
       font-size: 1rem;
@@ -1151,16 +1162,21 @@
 
     function debounce(func, wait) {
       let timeout;
-      return function(...args) {
+      const f = function(...args) {
         const context = this;
         clearTimeout(timeout);
         timeout = setTimeout(() => func.apply(context, args), wait);
       };
+      f.cancel = () => clearTimeout(timeout);
+      return f;
     }
 
     function generateCommands(scroll = true) {
       const input = document.getElementById('repo-input').value.trim();
       const container = document.getElementById('generated-commands');
+      const inputEl = document.getElementById('repo-input');
+
+      inputEl.classList.remove('invalid');
 
       if (!input) {
         container.classList.remove('visible');
@@ -1168,6 +1184,17 @@
       }
 
       const repo = extractRepo(input);
+
+      // Validate repo format (prevent shell injection)
+      const validPattern = /^[a-zA-Z0-9_.-]+\/[a-zA-Z0-9_.-]+$/;
+      if (!validPattern.test(repo)) {
+        container.classList.remove('visible');
+        if (scroll) {
+          inputEl.classList.add('invalid');
+        }
+        return;
+      }
+
       const unixCmd = `curl -fsSL install.cat/${repo} | sh`;
       const winCmd = `irm install.cat/${repo} | iex`;
 
@@ -1209,10 +1236,18 @@
       });
 
       // Generator
-      document.getElementById('generate-btn').addEventListener('click', () => generateCommands(true));
-      document.getElementById('repo-input').addEventListener('input', debounce(() => generateCommands(false), 300));
+      const debouncedGen = debounce(() => generateCommands(false), 300);
+
+      document.getElementById('generate-btn').addEventListener('click', () => {
+        debouncedGen.cancel();
+        generateCommands(true);
+      });
+      document.getElementById('repo-input').addEventListener('input', debouncedGen);
       document.getElementById('repo-input').addEventListener('keypress', e => {
-        if (e.key === 'Enter') generateCommands(true);
+        if (e.key === 'Enter') {
+          debouncedGen.cancel();
+          generateCommands(true);
+        }
       });
 
       // Pre-fill generator with example
