@@ -1143,10 +1143,17 @@
     function extractRepo(input) {
       let clean = input.trim();
       const match = clean.match(/(?:^|@|\/\/)(?:www\.)?github\.com[:/]([^/]+)\/([^/]+)/);
+      let repo;
       if (match) {
-        return `${match[1]}/${match[2]}`.replace(/\.git$/, '');
+        repo = `${match[1]}/${match[2]}`.replace(/\.git$/, '');
+      } else {
+        repo = clean.replace(/\.git$/, '').replace(/\/$/, '');
       }
-      return clean.replace(/\.git$/, '').replace(/\/$/, '');
+
+      if (!/^[a-zA-Z0-9_.-]+\/[a-zA-Z0-9_.-]+$/.test(repo)) {
+        return null;
+      }
+      return repo;
     }
 
     function debounce(func, wait) {
@@ -1168,6 +1175,12 @@
       }
 
       const repo = extractRepo(input);
+
+      if (!repo) {
+        container.classList.remove('visible');
+        return;
+      }
+
       const unixCmd = `curl -fsSL install.cat/${repo} | sh`;
       const winCmd = `irm install.cat/${repo} | iex`;
 
