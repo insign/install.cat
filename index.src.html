@@ -585,6 +585,12 @@
               </button>
             </div>
           </div>
+          <div class="command-block">
+            <div class="command-label" data-i18n="androidLabel">Android (open in browser)</div>
+            <div class="command-content">
+              <code><span class="syn-url">install.cat/verseles/ask</span> <span class="syn-flag" data-i18n="androidAutoApk">→ auto-downloads APK</span></code>
+            </div>
+          </div>
         </div>
       </div>
     </section>
@@ -620,9 +626,15 @@
               </button>
             </div>
           </div>
+          <div class="command-block">
+            <div class="command-label" data-i18n="androidLabel">Android (open in browser)</div>
+            <div class="command-content">
+              <code id="gen-android"></code>
+            </div>
+          </div>
         </div>
         <div class="ai-tip">
-          🤖 <span data-i18n="aiTip">Using AI? Just paste:</span> <code>Update @README.md to use https://install.cat</code>
+          🤖 <span data-i18n="aiTip">Using AI? Just paste:</span> <code>Update @README.md to use https://install.cat (supports Linux, macOS, Windows and Android)</code>
         </div>
       </div>
     </section>
@@ -635,7 +647,7 @@
             <div class="step-number">1</div>
             <div class="step-content">
               <h3 data-i18n="step1Title">Add install scripts to your repo</h3>
-              <p><span data-i18n="step1Desc">Create</span> <code>install.sh</code> <span data-i18n="step1Desc2">for Linux/macOS and</span> <code>install.ps1</code> <span data-i18n="step1Desc3">for Windows in your main branch</span></p>
+              <p><span data-i18n="step1Desc">Create</span> <code>install.sh</code> <span data-i18n="step1Desc2">for Linux/macOS and</span> <code>install.ps1</code> <span data-i18n="step1Desc3">for Windows in your main branch.</span> <span data-i18n="step1Desc4">APKs in releases work automatically for Android.</span></p>
             </div>
           </div>
           <div class="step">
@@ -649,7 +661,7 @@
             <div class="step-number">3</div>
             <div class="step-content">
               <h3 data-i18n="step3Title">That's it!</h3>
-              <p data-i18n="step3Desc">We fetch the script from your repo and pipe it to the shell. Zero config.</p>
+              <p data-i18n="step3Desc">We fetch the script from your repo and pipe it to the shell. On Android, it auto-downloads the APK. Zero config.</p>
             </div>
           </div>
         </div>
@@ -686,15 +698,18 @@
         step1Title: 'Add install scripts to your repo',
         step1Desc: 'Create',
         step1Desc2: 'for Linux/macOS and',
-        step1Desc3: 'for Windows in your main branch',
+        step1Desc3: 'for Windows in your main branch.',
+        step1Desc4: 'APKs in releases work automatically for Android.',
         step2Title: 'Share the install command',
         step2Desc: 'Tell your users to run the one-liner for their platform',
         step3Title: "That's it!",
-        step3Desc: 'We fetch the script from your repo and pipe it to the shell. Zero config.',
+        step3Desc: 'We fetch the script from your repo and pipe it to the shell. On Android, it auto-downloads the APK. Zero config.',
         aiTip: 'Using AI? Just paste:',
         tip1: 'No need to add',
         tip2: 'No need to add',
         tip2b: 'or',
+        androidLabel: 'Android (open in browser)',
+        androidAutoApk: '\u2192 auto-downloads APK',
         footer: 'Made with',
         footerBy: 'by'
       },
@@ -713,15 +728,18 @@
         step1Title: 'Adicione scripts de instalação ao seu repo',
         step1Desc: 'Crie',
         step1Desc2: 'para Linux/macOS e',
-        step1Desc3: 'para Windows na branch main',
+        step1Desc3: 'para Windows na branch main.',
+        step1Desc4: 'APKs nas releases funcionam automaticamente para Android.',
         step2Title: 'Compartilhe o comando de instalação',
         step2Desc: 'Diga aos seus usuários para rodar o one-liner da plataforma deles',
         step3Title: 'É isso!',
-        step3Desc: 'Buscamos o script do seu repo e passamos pro shell. Zero config.',
+        step3Desc: 'Buscamos o script do seu repo e passamos pro shell. No Android, baixa o APK automaticamente. Zero config.',
         aiTip: 'Usando IA? Só colar:',
         tip1: 'Não precisa adicionar',
         tip2: 'Não precisa adicionar',
         tip2b: 'ou',
+        androidLabel: 'Android (abrir no navegador)',
+        androidAutoApk: '\u2192 baixa APK automaticamente',
         footer: 'Feito com',
         footerBy: 'por'
       },
@@ -740,15 +758,18 @@
         step1Title: "Afegeix scripts d'instal·lació al teu repo",
         step1Desc: 'Crea',
         step1Desc2: 'per a Linux/macOS i',
-        step1Desc3: 'per a Windows a la branca main',
+        step1Desc3: 'per a Windows a la branca main.',
+        step1Desc4: "Els APKs a les releases funcionen automàticament per a Android.",
         step2Title: "Comparteix l'ordre d'instal·lació",
         step2Desc: "Digues als teus usuaris que executin el one-liner per a la seva plataforma",
         step3Title: 'Això és tot!',
-        step3Desc: "Obtenim l'script del teu repo i el passem al shell. Zero config.",
+        step3Desc: "Obtenim l'script del teu repo i el passem al shell. A Android, baixa l'APK automàticament. Zero config.",
         aiTip: 'Utilitzes IA? Només enganxa:',
         tip1: 'No cal afegir',
         tip2: 'No cal afegir',
         tip2b: 'o',
+        androidLabel: 'Android (obrir al navegador)',
+        androidAutoApk: '\u2192 baixa APK automàticament',
         footer: 'Fet amb',
         footerBy: 'per'
       },
@@ -767,15 +788,18 @@
         step1Title: 'أضف scripts التثبيت إلى repo الخاص بك',
         step1Desc: 'أنشئ',
         step1Desc2: 'لـ Linux/macOS و',
-        step1Desc3: 'لـ Windows في branch main',
+        step1Desc3: 'لـ Windows في branch main.',
+        step1Desc4: 'ملفات APK في الإصدارات تعمل تلقائياً لـ Android.',
         step2Title: 'شارك أمر التثبيت',
         step2Desc: 'أخبر المستخدمين لتشغيل الأمر المناسب لنظامهم',
         step3Title: 'هذا كل شيء!',
-        step3Desc: 'نحن نجلب script من repo الخاص بك ونمرره إلى shell. Zero config.',
+        step3Desc: 'نحن نجلب script من repo الخاص بك ونمرره إلى shell. على Android، يتم تحميل APK تلقائياً. Zero config.',
         aiTip: 'تستخدم AI؟ فقط الصق:',
         tip1: 'لا حاجة لإضافة',
         tip2: 'لا حاجة لإضافة',
         tip2b: 'أو',
+        androidLabel: 'Android (افتح في المتصفح)',
+        androidAutoApk: '\u2192 يحمّل APK تلقائياً',
         footer: 'صنع بـ',
         footerBy: 'بواسطة'
       },
@@ -794,15 +818,18 @@
         step1Title: 'আপনার repo-তে install scripts যোগ করুন',
         step1Desc: 'তৈরি করুন',
         step1Desc2: 'Linux/macOS এর জন্য এবং',
-        step1Desc3: 'Windows এর জন্য আপনার main branch-এ',
+        step1Desc3: 'Windows এর জন্য আপনার main branch-এ।',
+        step1Desc4: 'রিলিজে APK Android-এর জন্য স্বয়ংক্রিয়ভাবে কাজ করে।',
         step2Title: 'install কমান্ড শেয়ার করুন',
         step2Desc: 'আপনার ব্যবহারকারীদের বলুন তাদের প্ল্যাটফর্মের জন্য one-liner চালাতে',
         step3Title: 'ব্যস!',
-        step3Desc: 'আমরা আপনার repo থেকে script আনি এবং shell-এ পাঠাই। Zero config.',
+        step3Desc: 'আমরা আপনার repo থেকে script আনি এবং shell-এ পাঠাই। Android-এ APK স্বয়ংক্রিয়ভাবে ডাউনলোড হয়। Zero config.',
         aiTip: 'AI ব্যবহার করছেন? শুধু পেস্ট করুন:',
         tip1: 'যোগ করার প্রয়োজন নেই',
         tip2: 'যোগ করার প্রয়োজন নেই',
         tip2b: 'বা',
+        androidLabel: 'Android (ব্রাউজারে খুলুন)',
+        androidAutoApk: '\u2192 স্বয়ংক্রিয়ভাবে APK ডাউনলোড করে',
         footer: 'তৈরি করা হয়েছে',
         footerBy: 'দ্বারা'
       },
@@ -821,15 +848,18 @@
         step1Title: 'Füge install scripts zu deinem repo hinzu',
         step1Desc: 'Erstelle',
         step1Desc2: 'für Linux/macOS und',
-        step1Desc3: 'für Windows in deinem main branch',
+        step1Desc3: 'für Windows in deinem main branch.',
+        step1Desc4: 'APKs in Releases funktionieren automatisch für Android.',
         step2Title: 'Teile den Installationsbefehl',
         step2Desc: 'Sag deinen Nutzern, sie sollen den one-liner für ihre Plattform ausführen',
         step3Title: 'Das war\'s!',
-        step3Desc: 'Wir holen das script aus deinem repo und leiten es an die shell weiter. Zero config.',
+        step3Desc: 'Wir holen das script aus deinem repo und leiten es an die shell weiter. Auf Android wird die APK automatisch heruntergeladen. Zero config.',
         aiTip: 'AI verwenden? Einfach einfügen:',
         tip1: 'Nicht nötig hinzuzufügen',
         tip2: 'Nicht nötig hinzuzufügen',
         tip2b: 'oder',
+        androidLabel: 'Android (im Browser öffnen)',
+        androidAutoApk: '\u2192 lädt APK automatisch herunter',
         footer: 'Gemacht mit',
         footerBy: 'von'
       },
@@ -848,15 +878,18 @@
         step1Title: 'Añade scripts de instalación a tu repo',
         step1Desc: 'Crea',
         step1Desc2: 'para Linux/macOS y',
-        step1Desc3: 'para Windows en tu rama main',
+        step1Desc3: 'para Windows en tu rama main.',
+        step1Desc4: 'Los APKs en las releases funcionan automáticamente para Android.',
         step2Title: 'Comparte el comando de instalación',
         step2Desc: 'Dile a tus usuarios que ejecuten el one-liner para su plataforma',
         step3Title: '¡Eso es todo!',
-        step3Desc: 'Obtenemos el script de tu repo y lo pasamos al shell. Zero config.',
+        step3Desc: 'Obtenemos el script de tu repo y lo pasamos al shell. En Android, descarga el APK automáticamente. Zero config.',
         aiTip: '¿Usando IA? Solo pega:',
         tip1: 'No necesitas añadir',
         tip2: 'No necesitas añadir',
         tip2b: 'o',
+        androidLabel: 'Android (abrir en navegador)',
+        androidAutoApk: '\u2192 descarga APK automáticamente',
         footer: 'Hecho con',
         footerBy: 'por'
       },
@@ -875,15 +908,18 @@
         step1Title: 'Ajoutez des scripts d\'installation à votre repo',
         step1Desc: 'Créez',
         step1Desc2: 'pour Linux/macOS et',
-        step1Desc3: 'pour Windows dans votre branche main',
+        step1Desc3: 'pour Windows dans votre branche main.',
+        step1Desc4: 'Les APKs dans les releases fonctionnent automatiquement pour Android.',
         step2Title: 'Partagez la commande d\'installation',
         step2Desc: 'Dites à vos utilisateurs d\'exécuter le one-liner pour leur plateforme',
         step3Title: 'C\'est tout !',
-        step3Desc: 'Nous récupérons le script de votre repo et le passons au shell. Zero config.',
+        step3Desc: 'Nous récupérons le script de votre repo et le passons au shell. Sur Android, l\'APK se télécharge automatiquement. Zero config.',
         aiTip: 'Vous utilisez l\'IA ? Collez simplement :',
         tip1: 'Pas besoin d\'ajouter',
         tip2: 'Pas besoin d\'ajouter',
         tip2b: 'ou',
+        androidLabel: 'Android (ouvrir dans le navigateur)',
+        androidAutoApk: '\u2192 télécharge l\'APK automatiquement',
         footer: 'Fait avec',
         footerBy: 'par'
       },
@@ -902,15 +938,18 @@
         step1Title: 'अपने repo में install scripts जोड़ें',
         step1Desc: 'बनाएं',
         step1Desc2: 'Linux/macOS के लिए और',
-        step1Desc3: 'Windows के लिए अपनी main branch में',
+        step1Desc3: 'Windows के लिए अपनी main branch में।',
+        step1Desc4: 'रिलीज़ में APK Android के लिए स्वचालित रूप से काम करते हैं।',
         step2Title: 'install कमांड शेयर करें',
         step2Desc: 'अपने यूज़र्स को उनके प्लेटफॉर्म के लिए one-liner चलाने को कहें',
         step3Title: 'बस हो गया!',
-        step3Desc: 'हम आपके repo से script लाते हैं और shell में पाइप करते हैं। Zero config.',
+        step3Desc: 'हम आपके repo से script लाते हैं और shell में पाइप करते हैं। Android पर APK अपने आप डाउनलोड होता है। Zero config.',
         aiTip: 'AI इस्तेमाल कर रहे हैं? बस पेस्ट करें:',
         tip1: 'जोड़ने की जरूरत नहीं',
         tip2: 'जोड़ने की जरूरत नहीं',
         tip2b: 'या',
+        androidLabel: 'Android (ब्राउज़र में खोलें)',
+        androidAutoApk: '\u2192 APK अपने आप डाउनलोड करता है',
         footer: 'बनाया गया',
         footerBy: 'द्वारा'
       },
@@ -929,15 +968,18 @@
         step1Title: 'Tambahkan install scripts ke repo Anda',
         step1Desc: 'Buat',
         step1Desc2: 'untuk Linux/macOS dan',
-        step1Desc3: 'untuk Windows di branch main Anda',
+        step1Desc3: 'untuk Windows di branch main Anda.',
+        step1Desc4: 'APK di rilis berfungsi otomatis untuk Android.',
         step2Title: 'Bagikan perintah instalasi',
         step2Desc: 'Beritahu pengguna Anda untuk menjalankan one-liner untuk platform mereka',
         step3Title: 'Selesai!',
-        step3Desc: 'Kami mengambil script dari repo Anda dan menyalurkannya ke shell. Zero config.',
+        step3Desc: 'Kami mengambil script dari repo Anda dan menyalurkannya ke shell. Di Android, APK diunduh otomatis. Zero config.',
         aiTip: 'Menggunakan AI? Tempel saja:',
         tip1: 'Tidak perlu menambahkan',
         tip2: 'Tidak perlu menambahkan',
         tip2b: 'atau',
+        androidLabel: 'Android (buka di browser)',
+        androidAutoApk: '\u2192 unduh APK otomatis',
         footer: 'Dibuat dengan',
         footerBy: 'oleh'
       },
@@ -956,15 +998,18 @@
         step1Title: 'repoにinstall scriptsを追加',
         step1Desc: '作成',
         step1Desc2: 'をLinux/macOS用と',
-        step1Desc3: 'をWindows用にmain branchに',
+        step1Desc3: 'をWindows用にmain branchに。',
+        step1Desc4: 'リリースのAPKはAndroid用に自動で動作します。',
         step2Title: 'installコマンドを共有',
         step2Desc: 'ユーザーに各プラットフォーム用のone-linerを実行してもらう',
         step3Title: '以上！',
-        step3Desc: 'repoからscriptを取得してshellにパイプします。Zero config.',
+        step3Desc: 'repoからscriptを取得してshellにパイプします。AndroidではAPKが自動ダウンロードされます。Zero config.',
         aiTip: 'AIを使用？ただ貼り付けるだけ：',
         tip1: '追加不要',
         tip2: '追加不要',
         tip2b: 'または',
+        androidLabel: 'Android（ブラウザで開く）',
+        androidAutoApk: '\u2192 APKを自動ダウンロード',
         footer: '作成：',
         footerBy: ''
       },
@@ -983,15 +1028,18 @@
         step1Title: 'repo에 install scripts 추가',
         step1Desc: '생성',
         step1Desc2: 'Linux/macOS용과',
-        step1Desc3: 'Windows용을 main branch에',
+        step1Desc3: 'Windows용을 main branch에.',
+        step1Desc4: '릴리스의 APK는 Android에서 자동으로 작동합니다.',
         step2Title: 'install 명령 공유',
         step2Desc: '사용자에게 해당 플랫폼용 one-liner를 실행하도록 안내',
         step3Title: '끝!',
-        step3Desc: 'repo에서 script를 가져와 shell로 전달합니다. Zero config.',
+        step3Desc: 'repo에서 script를 가져와 shell로 전달합니다. Android에서는 APK가 자동 다운로드됩니다. Zero config.',
         aiTip: 'AI 사용 중? 그냥 붙여넣기:',
         tip1: '추가할 필요 없음',
         tip2: '추가할 필요 없음',
         tip2b: '또는',
+        androidLabel: 'Android (브라우저에서 열기)',
+        androidAutoApk: '\u2192 APK 자동 다운로드',
         footer: '제작',
         footerBy: ''
       },
@@ -1010,15 +1058,18 @@
         step1Title: 'तुमच्या repo मध्ये install scripts जोडा',
         step1Desc: 'तयार करा',
         step1Desc2: 'Linux/macOS साठी आणि',
-        step1Desc3: 'Windows साठी तुमच्या main branch मध्ये',
+        step1Desc3: 'Windows साठी तुमच्या main branch मध्ये.',
+        step1Desc4: 'रिलीझमधील APK Android साठी आपोआप काम करतात.',
         step2Title: 'install कमांड शेअर करा',
         step2Desc: 'तुमच्या वापरकर्त्यांना त्यांच्या प्लॅटफॉर्मसाठी one-liner चालवायला सांगा',
         step3Title: 'बस एवढेच!',
-        step3Desc: 'आम्ही तुमच्या repo मधून script आणतो आणि shell मध्ये पाठवतो। Zero config.',
+        step3Desc: 'आम्ही तुमच्या repo मधून script आणतो आणि shell मध्ये पाठवतो। Android वर APK आपोआप डाउनलोड होते. Zero config.',
         aiTip: 'AI वापरत आहात? फक्त पेस्ट करा:',
         tip1: 'जोडण्याची गरज नाही',
         tip2: 'जोडण्याची गरज नाही',
         tip2b: 'किंवा',
+        androidLabel: 'Android (ब्राउझरमध्ये उघडा)',
+        androidAutoApk: '\u2192 APK आपोआप डाउनलोड करतो',
         footer: 'बनवले',
         footerBy: 'द्वारे'
       },
@@ -1037,15 +1088,18 @@
         step1Title: 'Добавьте install scripts в ваш repo',
         step1Desc: 'Создайте',
         step1Desc2: 'для Linux/macOS и',
-        step1Desc3: 'для Windows в вашей ветке main',
+        step1Desc3: 'для Windows в вашей ветке main.',
+        step1Desc4: 'APK в релизах автоматически работают для Android.',
         step2Title: 'Поделитесь командой установки',
         step2Desc: 'Скажите пользователям запустить one-liner для их платформы',
         step3Title: 'Вот и всё!',
-        step3Desc: 'Мы получаем script из вашего repo и передаём его в shell. Zero config.',
+        step3Desc: 'Мы получаем script из вашего repo и передаём его в shell. На Android APK скачивается автоматически. Zero config.',
         aiTip: 'Используете AI? Просто вставьте:',
         tip1: 'Не нужно добавлять',
         tip2: 'Не нужно добавлять',
         tip2b: 'или',
+        androidLabel: 'Android (открыть в браузере)',
+        androidAutoApk: '\u2192 автоматически скачивает APK',
         footer: 'Сделано с',
         footerBy: ''
       },
@@ -1064,15 +1118,18 @@
         step1Title: 'Ongeza scripts za usakinishaji kwenye repo yako',
         step1Desc: 'Unda',
         step1Desc2: 'kwa Linux/macOS na',
-        step1Desc3: 'kwa Windows kwenye tawi lako kuu',
+        step1Desc3: 'kwa Windows kwenye tawi lako kuu.',
+        step1Desc4: 'APK katika matoleo hufanya kazi kiotomatiki kwa Android.',
         step2Title: 'Shiriki amri ya usakinishaji',
         step2Desc: 'Waambie watumiaji wako waendere one-liner kwa jukwaa lao',
         step3Title: 'Hiyo ndiyo!',
-        step3Desc: 'Tunaleta script kutoka repo yako na kuipeleka kwenye shell. Zero config.',
+        step3Desc: 'Tunaleta script kutoka repo yako na kuipeleka kwenye shell. Kwenye Android, APK inapakuliwa kiotomatiki. Zero config.',
         aiTip: 'Unatumia AI? Tu bandika:',
         tip1: 'Hakuna haja ya kuongeza',
         tip2: 'Hakuna haja ya kuongeza',
         tip2b: 'au',
+        androidLabel: 'Android (fungua kwenye kivinjari)',
+        androidAutoApk: '\u2192 inapakua APK kiotomatiki',
         footer: 'Imeundwa kwa',
         footerBy: 'na'
       },
@@ -1091,15 +1148,18 @@
         step1Title: 'اپنے repo میں install scripts شامل کریں',
         step1Desc: 'بنائیں',
         step1Desc2: 'Linux/macOS کے لیے اور',
-        step1Desc3: 'Windows کے لیے اپنی main branch میں',
+        step1Desc3: 'Windows کے لیے اپنی main branch میں۔',
+        step1Desc4: 'ریلیزز میں APK خودکار طور پر Android کے لیے کام کرتے ہیں۔',
         step2Title: 'install کمانڈ شیئر کریں',
         step2Desc: 'اپنے صارفین کو ان کے پلیٹ فارم کے لیے one-liner چلانے کو کہیں',
         step3Title: 'بس ہو گیا!',
-        step3Desc: 'ہم آپ کے repo سے script لاتے ہیں اور shell میں بھیجتے ہیں۔ Zero config.',
+        step3Desc: 'ہم آپ کے repo سے script لاتے ہیں اور shell میں بھیجتے ہیں۔ Android پر APK خودکار طور پر ڈاؤن لوڈ ہوتا ہے۔ Zero config.',
         aiTip: 'AI استعمال کر رہے ہیں؟ صرف پیسٹ کریں:',
         tip1: 'شامل کرنے کی ضرورت نہیں',
         tip2: 'شامل کرنے کی ضرورت نہیں',
         tip2b: 'یا',
+        androidLabel: 'Android (براؤزر میں کھولیں)',
+        androidAutoApk: '\u2192 خودکار طور پر APK ڈاؤن لوڈ کرتا ہے',
         footer: 'بنایا گیا',
         footerBy: 'کی طرف سے'
       },
@@ -1118,15 +1178,18 @@
         step1Title: '将 install scripts 添加到您的 repo',
         step1Desc: '创建',
         step1Desc2: '用于 Linux/macOS，以及',
-        step1Desc3: '用于 Windows，放在您的 main branch 中',
+        step1Desc3: '用于 Windows，放在您的 main branch 中。',
+        step1Desc4: '发布中的 APK 会自动适配 Android。',
         step2Title: '分享安装命令',
         step2Desc: '告诉您的用户运行适合其平台的 one-liner',
         step3Title: '就这样！',
-        step3Desc: '我们从您的 repo 获取 script 并传送到 shell。Zero config.',
+        step3Desc: '我们从您的 repo 获取 script 并传送到 shell。在 Android 上自动下载 APK。Zero config.',
         aiTip: '使用 AI？只需粘贴：',
         tip1: '无需添加',
         tip2: '无需添加',
         tip2b: '或',
+        androidLabel: 'Android（在浏览器中打开）',
+        androidAutoApk: '\u2192 自动下载 APK',
         footer: '制作者',
         footerBy: ''
       }
@@ -1248,6 +1311,7 @@
 
       document.getElementById('gen-unix').innerHTML = highlightUnix(repo);
       document.getElementById('gen-win').innerHTML = highlightWin(repo);
+      document.getElementById('gen-android').innerHTML = `<span class="syn-url">install.cat/${escapeHtml(repo)}</span> <span class="syn-flag">${(translations[detectLanguage()] || translations.en).androidAutoApk}</span>`;
       document.getElementById('copy-unix').setAttribute('data-copy', unixCmd);
       document.getElementById('copy-win').setAttribute('data-copy', winCmd);
 

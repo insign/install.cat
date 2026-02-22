@@ -30,11 +30,16 @@ wget -O- install.cat/verseles/xpm | sh
 irm install.cat/verseles/xpm | iex
 ```
 
+### Android
+
+Just open `install.cat/user/repo` in your Android browser — the APK from the latest GitHub release is downloaded automatically, matched to your device architecture.
+
 ### For your own project
 
 1. Add an `install.sh` to the root of your repo (for Linux/macOS)
 2. Add an `install.ps1` to the root of your repo (for Windows)
-3. Tell your users:
+3. For Android: publish APKs in your GitHub releases (naming convention: `{repo}-android-{arch}.apk`, or any `.apk` — the system uses a priority fallback). You can also add an `android.html` to your repo root to override the default behavior.
+4. Tell your users:
 
 ```bash
 curl -fsSL install.cat/your-username/your-repo | sh
@@ -53,6 +58,7 @@ install.cat runs entirely on **Cloudflare Redirect Rules** — there is no serve
 | `curl` | `raw.githubusercontent.com/{user}/{repo}/refs/heads/main/install.sh` |
 | `wget` | `raw.githubusercontent.com/{user}/{repo}/refs/heads/main/install.sh` |
 | `PowerShell` | `raw.githubusercontent.com/{user}/{repo}/refs/heads/main/install.ps1` |
+| `Android` | `install.cat/android.html?gh={user}/{repo}` (detects arch, finds APK) |
 | Browser (default) | `github.com/{user}/{repo}/` |
 
 The full ruleset:
@@ -62,7 +68,8 @@ The full ruleset:
 3. **curl → install.sh** — 302 redirect to raw script on GitHub
 4. **wget → install.sh** — 302 redirect to raw script on GitHub
 5. **PowerShell → install.ps1** — 302 redirect to raw script on GitHub
-6. **Browser → GitHub** — 302 redirect to the repo page
+6. **Android → android.html** — 302 redirect to APK finder page
+7. **Browser → GitHub** — 302 redirect to the repo page
 
 ### Self-hosting: create the rules yourself
 
@@ -224,9 +231,11 @@ The landing page at [install.cat](https://install.cat) includes:
 ### Project structure
 
 ```
-index.src.html   # Source file — edit this
-index.html       # Minified output — auto-generated, do not edit
-Makefile         # Dev commands
+index.src.html     # Main page source — edit this
+index.html         # Minified output — auto-generated, do not edit
+android.src.html   # Android APK redirect page source — edit this
+android.html       # Minified output — auto-generated, do not edit
+Makefile           # Dev commands
 ```
 
 ### Prerequisites

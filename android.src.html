@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>install.cat - Downloading APK...</title>
+  <meta name="theme-color" content="#0d1117" media="(prefers-color-scheme: dark)">
+  <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🐱</text></svg>">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #ffffff;
+      --bg-secondary: #f6f8fa;
+      --text: #1f2328;
+      --text-secondary: #656d76;
+      --accent: #8957e5;
+      --accent-hover: #7c3aed;
+      --border: #d0d7de;
+      --code-bg: #f6f8fa;
+      --success: #2da44e;
+      --error: #cf222e;
+      --font-sans: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #0d1117;
+        --bg-secondary: #161b22;
+        --text: #e6edf3;
+        --text-secondary: #8b949e;
+        --accent: #a371f7;
+        --accent-hover: #8957e5;
+        --border: #30363d;
+        --code-bg: #161b22;
+        --success: #3fb950;
+        --error: #f85149;
+      }
+    }
+
+    body {
+      font-family: var(--font-sans);
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .container {
+      text-align: center;
+      padding: 2rem;
+      max-width: 480px;
+    }
+
+    /* Spinner */
+    .spinner {
+      width: 48px;
+      height: 48px;
+      border: 4px solid var(--border);
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin: 0 auto 1.5rem;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .logo {
+      font-size: 2rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .message {
+      font-size: 1.1rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    /* Error state */
+    .error-state { display: none; }
+
+    .error-state.visible {
+      display: block;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .loading-state.hidden { display: none; }
+
+    .error-icon {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+    }
+
+    .error-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      color: var(--error);
+    }
+
+    .error-detail {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      margin-bottom: 1.5rem;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1.5rem;
+      background: var(--accent);
+      color: white;
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 1rem;
+      transition: background 0.2s;
+    }
+
+    .btn:hover { background: var(--accent-hover); }
+
+    .home-link {
+      display: block;
+      margin-top: 1.5rem;
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 0.875rem;
+    }
+
+    .home-link:hover { color: var(--accent); }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Loading state -->
+    <div class="loading-state" id="loading">
+      <div class="logo">🐱</div>
+      <div class="spinner"></div>
+      <p class="message" data-i18n="androidLoading">Detecting your device and downloading...</p>
+    </div>
+
+    <!-- Error state -->
+    <div class="error-state" id="error">
+      <div class="error-icon">📦</div>
+      <p class="error-title" data-i18n="androidError">No Android app found for this project</p>
+      <p class="error-detail" id="error-detail"></p>
+      <a class="btn" id="releases-link" href="#" data-i18n="androidViewReleases">View all releases</a>
+      <a class="home-link" href="/">🐱 install.cat</a>
+    </div>
+  </div>
+
+  <script>
+    const translations = {
+      en: { androidLoading: 'Detecting your device and downloading...', androidError: 'No Android app found for this project', androidViewReleases: 'View all releases' },
+      pt: { androidLoading: 'Detectando seu dispositivo e baixando...', androidError: 'Nenhum app Android encontrado para este projeto', androidViewReleases: 'Ver todas as releases' },
+      ca: { androidLoading: 'Detectant el teu dispositiu i baixant...', androidError: "No s'ha trobat cap app Android per a aquest projecte", androidViewReleases: 'Veure totes les releases' },
+      ar: { androidLoading: 'جاري اكتشاف جهازك والتحميل...', androidError: 'لم يتم العثور على تطبيق Android لهذا المشروع', androidViewReleases: 'عرض جميع الإصدارات' },
+      bn: { androidLoading: 'আপনার ডিভাইস শনাক্ত করা হচ্ছে এবং ডাউনলোড হচ্ছে...', androidError: 'এই প্রকল্পের জন্য কোনো Android অ্যাপ পাওয়া যায়নি', androidViewReleases: 'সমস্ত রিলিজ দেখুন' },
+      de: { androidLoading: 'Gerät wird erkannt und Download läuft...', androidError: 'Keine Android-App für dieses Projekt gefunden', androidViewReleases: 'Alle Releases anzeigen' },
+      es: { androidLoading: 'Detectando tu dispositivo y descargando...', androidError: 'No se encontró app Android para este proyecto', androidViewReleases: 'Ver todas las releases' },
+      fr: { androidLoading: 'Détection de votre appareil et téléchargement...', androidError: 'Aucune app Android trouvée pour ce projet', androidViewReleases: 'Voir toutes les releases' },
+      hi: { androidLoading: 'आपका डिवाइस पहचाना जा रहा है और डाउनलोड हो रहा है...', androidError: 'इस प्रोजेक्ट के लिए कोई Android ऐप नहीं मिला', androidViewReleases: 'सभी रिलीज़ देखें' },
+      id: { androidLoading: 'Mendeteksi perangkat Anda dan mengunduh...', androidError: 'Tidak ditemukan app Android untuk proyek ini', androidViewReleases: 'Lihat semua rilis' },
+      ja: { androidLoading: 'デバイスを検出してダウンロード中...', androidError: 'このプロジェクトのAndroidアプリが見つかりません', androidViewReleases: 'すべてのリリースを見る' },
+      ko: { androidLoading: '기기를 감지하고 다운로드 중...', androidError: '이 프로젝트의 Android 앱을 찾을 수 없습니다', androidViewReleases: '모든 릴리스 보기' },
+      mr: { androidLoading: 'तुमचे डिव्हाइस ओळखत आहे आणि डाउनलोड करत आहे...', androidError: 'या प्रकल्पासाठी कोणतेही Android अॅप सापडले नाही', androidViewReleases: 'सर्व रिलीझ पहा' },
+      ru: { androidLoading: 'Определение устройства и загрузка...', androidError: 'Android-приложение для этого проекта не найдено', androidViewReleases: 'Посмотреть все релизы' },
+      sw: { androidLoading: 'Inatambua kifaa chako na kupakua...', androidError: 'Hakuna app ya Android iliyopatikana kwa mradi huu', androidViewReleases: 'Tazama matoleo yote' },
+      ur: { androidLoading: 'آپ کا آلہ پہچانا جا رہا ہے اور ڈاؤن لوڈ ہو رہا ہے...', androidError: 'اس پروجیکٹ کے لیے کوئی Android ایپ نہیں ملی', androidViewReleases: 'تمام ریلیزز دیکھیں' },
+      zh: { androidLoading: '正在检测您的设备并下载...', androidError: '未找到此项目的 Android 应用', androidViewReleases: '查看所有版本' }
+    };
+
+    function detectLanguage() {
+      const lang = navigator.language || navigator.userLanguage || 'en';
+      const shortLang = lang.split('-')[0].toLowerCase();
+      const supported = ['ar', 'bn', 'ca', 'de', 'en', 'es', 'fr', 'hi', 'id', 'ja', 'ko', 'mr', 'pt', 'ru', 'sw', 'ur', 'zh'];
+      return supported.includes(shortLang) ? shortLang : 'en';
+    }
+
+    function applyTranslations(lang) {
+      const t = translations[lang] || translations.en;
+      const isRTL = ['ar', 'ur'].includes(lang);
+      document.documentElement.dir = isRTL ? 'rtl' : 'ltr';
+      document.documentElement.lang = lang === 'pt' ? 'pt-BR' : lang;
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (t[key]) el.textContent = t[key];
+      });
+    }
+
+    function showError(detail, repo) {
+      document.getElementById('loading').classList.add('hidden');
+      const errorEl = document.getElementById('error');
+      errorEl.classList.add('visible');
+      document.getElementById('error-detail').textContent = detail || '';
+      if (repo) {
+        document.getElementById('releases-link').href = `https://github.com/${repo}/releases`;
+      }
+    }
+
+    // Detect device architecture via User-Agent Client Hints API, fallback to arm64
+    async function detectArch() {
+      try {
+        if (navigator.userAgentData) {
+          const hints = await navigator.userAgentData.getHighEntropyValues(['architecture']);
+          if (hints.architecture) return hints.architecture;
+        }
+      } catch (e) {
+        // API unavailable or permission denied
+      }
+      return 'arm64';
+    }
+
+    // Find the best matching APK from release assets
+    function findApk(assets, repo, arch) {
+      const repoName = repo.split('/')[1];
+      const apks = assets.filter(a => a.name.endsWith('.apk'));
+      if (!apks.length) return null;
+
+      // Priority 1: exact match {repo}-android-{arch}.apk
+      const exact = apks.find(a => a.name === `${repoName}-android-${arch}.apk`);
+      if (exact) return exact;
+
+      // Priority 2: partial match *android*{arch}*.apk
+      const archLower = arch.toLowerCase();
+      const partialArch = apks.find(a => {
+        const name = a.name.toLowerCase();
+        return name.includes('android') && name.includes(archLower);
+      });
+      if (partialArch) return partialArch;
+
+      // Priority 3: any Android APK *android*.apk
+      const anyAndroid = apks.find(a => a.name.toLowerCase().includes('android'));
+      if (anyAndroid) return anyAndroid;
+
+      // Priority 4: any APK at all
+      return apks[0];
+    }
+
+    async function main() {
+      const lang = detectLanguage();
+      applyTranslations(lang);
+
+      // Read ?gh= parameter
+      const params = new URLSearchParams(window.location.search);
+      const repo = params.get('gh');
+
+      if (!repo || !repo.match(/^[a-zA-Z0-9_.-]+\/[a-zA-Z0-9_.-]+$/)) {
+        showError('Invalid or missing ?gh=user/repo parameter', null);
+        return;
+      }
+
+      // Check if the repo has its own android.html
+      try {
+        const checkUrl = `https://raw.githubusercontent.com/${repo}/refs/heads/main/android.html`;
+        const head = await fetch(checkUrl, { method: 'HEAD' });
+        if (head.ok) {
+          window.location.href = checkUrl;
+          return;
+        }
+      } catch (e) {
+        // 404 or network error, proceed with default flow
+      }
+
+      // Detect architecture and fetch release in parallel
+      const [arch, releaseRes] = await Promise.all([
+        detectArch(),
+        fetch(`https://api.github.com/repos/${repo}/releases/latest`).catch(() => null)
+      ]);
+
+      if (!releaseRes || !releaseRes.ok) {
+        showError(
+          releaseRes?.status === 404
+            ? 'No releases found for this repository.'
+            : 'Could not fetch release information.',
+          repo
+        );
+        return;
+      }
+
+      const release = await releaseRes.json();
+      const apk = findApk(release.assets || [], repo, arch);
+
+      if (apk) {
+        window.location.href = apk.browser_download_url;
+      } else {
+        showError('No APK found in the latest release.', repo);
+      }
+    }
+
+    main();
+  </script>
+</body>
+</html>

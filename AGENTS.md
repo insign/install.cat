@@ -3,15 +3,17 @@
 ## Project Structure
 
 ```
-index.src.html  # Source file (edit this)
-index.html      # Minified output (generated, do not edit)
+index.src.html    # Main page source (edit this)
+index.html        # Minified output (generated, do not edit)
+android.src.html  # Android APK redirect page source (edit this)
+android.html      # Minified output (generated, do not edit)
 ```
 
 ## Rules
 
-1. **Never edit `index.html` directly** - it's auto-generated
-2. **Always edit `index.src.html`** - this is the source of truth
-3. A git pre-commit hook automatically runs `minhtml` and stages `index.html` when `index.src.html` is committed
+1. **Never edit `index.html` or `android.html` directly** - they are auto-generated
+2. **Always edit `*.src.html` files** - these are the source of truth
+3. A git pre-commit hook automatically runs `minhtml` and stages minified outputs when source files are committed
 4. **Commit both files** - source and minified together (handled by the hook)
 
 ## Cloudflare Redirect Rules

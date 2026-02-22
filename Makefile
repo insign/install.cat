@@ -1,17 +1,19 @@
 .PHONY: dev open build watch
 
-# Minify source to production
+# Minify all source files to production
 build:
 	minhtml --minify-css --minify-js --output index.html index.src.html
+	minhtml --minify-css --minify-js --output android.html android.src.html
 
 # Serve locally and watch for changes
 dev:
 	@echo "Serving at http://localhost:8080/index.src.html"
-	@echo "Watching index.src.html for changes..."
+	@echo "Watching *.src.html for changes..."
 	@python3 -m http.server 8080 &
 	@sleep 1 && xdg-open http://localhost:8080/index.src.html &
-	@while true; do inotifywait -qe modify index.src.html 2>/dev/null || fswatch -1 index.src.html 2>/dev/null || sleep 2; \
-		minhtml --minify-css --minify-js --output index.html index.src.html && echo "[ok] index.html updated"; done
+	@while true; do inotifywait -qe modify index.src.html android.src.html 2>/dev/null || fswatch -1 index.src.html android.src.html 2>/dev/null || sleep 2; \
+		minhtml --minify-css --minify-js --output index.html index.src.html && echo "[ok] index.html updated"; \
+		minhtml --minify-css --minify-js --output android.html android.src.html && echo "[ok] android.html updated"; done
 
 # Open in browser
 open:
@@ -19,5 +21,6 @@ open:
 
 # Watch and rebuild (no server)
 watch:
-	@while true; do inotifywait -qe modify index.src.html 2>/dev/null || fswatch -1 index.src.html 2>/dev/null || sleep 2; \
-		minhtml --minify-css --minify-js --output index.html index.src.html && echo "[ok] index.html updated"; done
+	@while true; do inotifywait -qe modify index.src.html android.src.html 2>/dev/null || fswatch -1 index.src.html android.src.html 2>/dev/null || sleep 2; \
+		minhtml --minify-css --minify-js --output index.html index.src.html && echo "[ok] index.html updated"; \
+		minhtml --minify-css --minify-js --output android.html android.src.html && echo "[ok] android.html updated"; done
