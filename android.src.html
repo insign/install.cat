@@ -125,6 +125,48 @@
 
     .btn:hover { background: var(--accent-hover); }
 
+    /* Fallback buttons shown after download starts */
+    .fallback-actions {
+      display: none;
+      margin-top: 2rem;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .fallback-actions.visible { display: block; }
+
+    .fallback-hint {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      margin-bottom: 0.75rem;
+    }
+
+    .btn-row {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      align-items: center;
+    }
+
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.6rem 1.2rem;
+      background: var(--bg-secondary);
+      color: var(--text);
+      text-decoration: none;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      font-weight: 500;
+      font-size: 0.9rem;
+      transition: border-color 0.2s, background 0.2s;
+    }
+
+    .btn-secondary:hover {
+      border-color: var(--accent);
+      background: var(--code-bg);
+    }
+
     .home-link {
       display: block;
       margin-top: 1.5rem;
@@ -139,6 +181,16 @@
       from { opacity: 0; transform: translateY(-10px); }
       to { opacity: 1; transform: translateY(0); }
     }
+
+    noscript p {
+      font-size: 1.1rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    noscript a {
+      color: var(--accent);
+    }
   </style>
 </head>
 <body>
@@ -148,6 +200,15 @@
       <div class="logo">🐱</div>
       <div class="spinner"></div>
       <p class="message" data-i18n="androidLoading">Detecting your device and downloading...</p>
+      <!-- Fallback buttons shown after download redirect -->
+      <div class="fallback-actions" id="fallback">
+        <p class="fallback-hint" data-i18n="androidFallbackHint">Download didn't start? Try these options:</p>
+        <div class="btn-row">
+          <a class="btn" id="download-btn" href="#" data-i18n="androidDownloadApk">Download APK</a>
+          <a class="btn-secondary" id="repo-link" href="#" data-i18n="androidViewRepo">View repository</a>
+          <a class="btn-secondary" id="releases-fallback-link" href="#" data-i18n="androidViewReleases">View all releases</a>
+        </div>
+      </div>
     </div>
 
     <!-- Error state -->
@@ -156,29 +217,38 @@
       <p class="error-title" data-i18n="androidError">No Android app found for this project</p>
       <p class="error-detail" id="error-detail"></p>
       <a class="btn" id="releases-link" href="#" data-i18n="androidViewReleases">View all releases</a>
+      <br>
+      <a class="btn-secondary" id="repo-error-link" href="#" style="margin-top:0.75rem" data-i18n="androidViewRepo">View repository</a>
       <a class="home-link" href="/">🐱 install.cat</a>
     </div>
+
+    <noscript>
+      <div class="logo">🐱</div>
+      <p data-i18n="androidNoscript">JavaScript is required to detect your device and find the right APK. Please enable JavaScript or visit the repository directly.</p>
+      <br>
+      <a class="btn" href="/" data-i18n="androidNoscriptHome">Go to install.cat</a>
+    </noscript>
   </div>
 
   <script>
     const translations = {
-      en: { androidLoading: 'Detecting your device and downloading...', androidError: 'No Android app found for this project', androidViewReleases: 'View all releases' },
-      pt: { androidLoading: 'Detectando seu dispositivo e baixando...', androidError: 'Nenhum app Android encontrado para este projeto', androidViewReleases: 'Ver todas as releases' },
-      ca: { androidLoading: 'Detectant el teu dispositiu i baixant...', androidError: "No s'ha trobat cap app Android per a aquest projecte", androidViewReleases: 'Veure totes les releases' },
-      ar: { androidLoading: 'جاري اكتشاف جهازك والتحميل...', androidError: 'لم يتم العثور على تطبيق Android لهذا المشروع', androidViewReleases: 'عرض جميع الإصدارات' },
-      bn: { androidLoading: 'আপনার ডিভাইস শনাক্ত করা হচ্ছে এবং ডাউনলোড হচ্ছে...', androidError: 'এই প্রকল্পের জন্য কোনো Android অ্যাপ পাওয়া যায়নি', androidViewReleases: 'সমস্ত রিলিজ দেখুন' },
-      de: { androidLoading: 'Gerät wird erkannt und Download läuft...', androidError: 'Keine Android-App für dieses Projekt gefunden', androidViewReleases: 'Alle Releases anzeigen' },
-      es: { androidLoading: 'Detectando tu dispositivo y descargando...', androidError: 'No se encontró app Android para este proyecto', androidViewReleases: 'Ver todas las releases' },
-      fr: { androidLoading: 'Détection de votre appareil et téléchargement...', androidError: 'Aucune app Android trouvée pour ce projet', androidViewReleases: 'Voir toutes les releases' },
-      hi: { androidLoading: 'आपका डिवाइस पहचाना जा रहा है और डाउनलोड हो रहा है...', androidError: 'इस प्रोजेक्ट के लिए कोई Android ऐप नहीं मिला', androidViewReleases: 'सभी रिलीज़ देखें' },
-      id: { androidLoading: 'Mendeteksi perangkat Anda dan mengunduh...', androidError: 'Tidak ditemukan app Android untuk proyek ini', androidViewReleases: 'Lihat semua rilis' },
-      ja: { androidLoading: 'デバイスを検出してダウンロード中...', androidError: 'このプロジェクトのAndroidアプリが見つかりません', androidViewReleases: 'すべてのリリースを見る' },
-      ko: { androidLoading: '기기를 감지하고 다운로드 중...', androidError: '이 프로젝트의 Android 앱을 찾을 수 없습니다', androidViewReleases: '모든 릴리스 보기' },
-      mr: { androidLoading: 'तुमचे डिव्हाइस ओळखत आहे आणि डाउनलोड करत आहे...', androidError: 'या प्रकल्पासाठी कोणतेही Android अॅप सापडले नाही', androidViewReleases: 'सर्व रिलीझ पहा' },
-      ru: { androidLoading: 'Определение устройства и загрузка...', androidError: 'Android-приложение для этого проекта не найдено', androidViewReleases: 'Посмотреть все релизы' },
-      sw: { androidLoading: 'Inatambua kifaa chako na kupakua...', androidError: 'Hakuna app ya Android iliyopatikana kwa mradi huu', androidViewReleases: 'Tazama matoleo yote' },
-      ur: { androidLoading: 'آپ کا آلہ پہچانا جا رہا ہے اور ڈاؤن لوڈ ہو رہا ہے...', androidError: 'اس پروجیکٹ کے لیے کوئی Android ایپ نہیں ملی', androidViewReleases: 'تمام ریلیزز دیکھیں' },
-      zh: { androidLoading: '正在检测您的设备并下载...', androidError: '未找到此项目的 Android 应用', androidViewReleases: '查看所有版本' }
+      en: { androidLoading: 'Detecting your device and downloading...', androidError: 'No Android app found for this project', androidViewReleases: 'View all releases', androidViewRepo: 'View repository', androidDownloadApk: 'Download APK', androidFallbackHint: "Download didn't start? Try these options:", androidNoscript: 'JavaScript is required to detect your device and find the right APK. Please enable JavaScript or visit the repository directly.', androidNoscriptHome: 'Go to install.cat' },
+      pt: { androidLoading: 'Detectando seu dispositivo e baixando...', androidError: 'Nenhum app Android encontrado para este projeto', androidViewReleases: 'Ver todas as releases', androidViewRepo: 'Ver repositório', androidDownloadApk: 'Baixar APK', androidFallbackHint: 'Download não iniciou? Tente estas opções:', androidNoscript: 'JavaScript é necessário para detectar seu dispositivo e encontrar o APK correto. Ative o JavaScript ou visite o repositório diretamente.', androidNoscriptHome: 'Ir para install.cat' },
+      ca: { androidLoading: 'Detectant el teu dispositiu i baixant...', androidError: "No s'ha trobat cap app Android per a aquest projecte", androidViewReleases: 'Veure totes les releases', androidViewRepo: 'Veure repositori', androidDownloadApk: "Descarregar APK", androidFallbackHint: "La descàrrega no ha començat? Prova aquestes opcions:", androidNoscript: "Cal JavaScript per detectar el teu dispositiu i trobar l'APK correcte. Activa JavaScript o visita el repositori directament.", androidNoscriptHome: 'Anar a install.cat' },
+      ar: { androidLoading: 'جاري اكتشاف جهازك والتحميل...', androidError: 'لم يتم العثور على تطبيق Android لهذا المشروع', androidViewReleases: 'عرض جميع الإصدارات', androidViewRepo: 'عرض المستودع', androidDownloadApk: 'تحميل APK', androidFallbackHint: 'لم يبدأ التحميل؟ جرب هذه الخيارات:', androidNoscript: 'JavaScript مطلوب لاكتشاف جهازك والعثور على APK المناسب. يرجى تفعيل JavaScript أو زيارة المستودع مباشرة.', androidNoscriptHome: 'الذهاب إلى install.cat' },
+      bn: { androidLoading: 'আপনার ডিভাইস শনাক্ত করা হচ্ছে এবং ডাউনলোড হচ্ছে...', androidError: 'এই প্রকল্পের জন্য কোনো Android অ্যাপ পাওয়া যায়নি', androidViewReleases: 'সমস্ত রিলিজ দেখুন', androidViewRepo: 'রিপোজিটরি দেখুন', androidDownloadApk: 'APK ডাউনলোড করুন', androidFallbackHint: 'ডাউনলোড শুরু হয়নি? এই বিকল্পগুলি চেষ্টা করুন:', androidNoscript: 'আপনার ডিভাইস শনাক্ত করতে এবং সঠিক APK খুঁজে পেতে JavaScript প্রয়োজন। দয়া করে JavaScript সক্রিয় করুন বা সরাসরি রিপোজিটরি ভিজিট করুন।', androidNoscriptHome: 'install.cat এ যান' },
+      de: { androidLoading: 'Gerät wird erkannt und Download läuft...', androidError: 'Keine Android-App für dieses Projekt gefunden', androidViewReleases: 'Alle Releases anzeigen', androidViewRepo: 'Repository ansehen', androidDownloadApk: 'APK herunterladen', androidFallbackHint: 'Download nicht gestartet? Versuche diese Optionen:', androidNoscript: 'JavaScript wird benötigt, um Ihr Gerät zu erkennen und die richtige APK zu finden. Bitte aktivieren Sie JavaScript oder besuchen Sie das Repository direkt.', androidNoscriptHome: 'Zu install.cat' },
+      es: { androidLoading: 'Detectando tu dispositivo y descargando...', androidError: 'No se encontró app Android para este proyecto', androidViewReleases: 'Ver todas las releases', androidViewRepo: 'Ver repositorio', androidDownloadApk: 'Descargar APK', androidFallbackHint: '¿No se inició la descarga? Prueba estas opciones:', androidNoscript: 'Se requiere JavaScript para detectar tu dispositivo y encontrar el APK correcto. Activa JavaScript o visita el repositorio directamente.', androidNoscriptHome: 'Ir a install.cat' },
+      fr: { androidLoading: 'Détection de votre appareil et téléchargement...', androidError: 'Aucune app Android trouvée pour ce projet', androidViewReleases: 'Voir toutes les releases', androidViewRepo: 'Voir le dépôt', androidDownloadApk: "Télécharger l'APK", androidFallbackHint: "Le téléchargement n'a pas démarré ? Essayez ces options :", androidNoscript: "JavaScript est requis pour détecter votre appareil et trouver le bon APK. Veuillez activer JavaScript ou visitez le dépôt directement.", androidNoscriptHome: 'Aller à install.cat' },
+      hi: { androidLoading: 'आपका डिवाइस पहचाना जा रहा है और डाउनलोड हो रहा है...', androidError: 'इस प्रोजेक्ट के लिए कोई Android ऐप नहीं मिला', androidViewReleases: 'सभी रिलीज़ देखें', androidViewRepo: 'रिपॉजिटरी देखें', androidDownloadApk: 'APK डाउनलोड करें', androidFallbackHint: 'डाउनलोड शुरू नहीं हुआ? ये विकल्प आज़माएं:', androidNoscript: 'आपके डिवाइस को पहचानने और सही APK खोजने के लिए JavaScript आवश्यक है। कृपया JavaScript सक्षम करें या सीधे रिपॉजिटरी पर जाएं।', androidNoscriptHome: 'install.cat पर जाएं' },
+      id: { androidLoading: 'Mendeteksi perangkat Anda dan mengunduh...', androidError: 'Tidak ditemukan app Android untuk proyek ini', androidViewReleases: 'Lihat semua rilis', androidViewRepo: 'Lihat repositori', androidDownloadApk: 'Unduh APK', androidFallbackHint: 'Unduhan tidak dimulai? Coba opsi ini:', androidNoscript: 'JavaScript diperlukan untuk mendeteksi perangkat Anda dan menemukan APK yang tepat. Silakan aktifkan JavaScript atau kunjungi repositori langsung.', androidNoscriptHome: 'Ke install.cat' },
+      ja: { androidLoading: 'デバイスを検出してダウンロード中...', androidError: 'このプロジェクトのAndroidアプリが見つかりません', androidViewReleases: 'すべてのリリースを見る', androidViewRepo: 'リポジトリを見る', androidDownloadApk: 'APKをダウンロード', androidFallbackHint: 'ダウンロードが始まりませんか？こちらをお試しください：', androidNoscript: 'デバイスを検出し適切なAPKを見つけるにはJavaScriptが必要です。JavaScriptを有効にするか、リポジトリを直接ご覧ください。', androidNoscriptHome: 'install.catへ' },
+      ko: { androidLoading: '기기를 감지하고 다운로드 중...', androidError: '이 프로젝트의 Android 앱을 찾을 수 없습니다', androidViewReleases: '모든 릴리스 보기', androidViewRepo: '저장소 보기', androidDownloadApk: 'APK 다운로드', androidFallbackHint: '다운로드가 시작되지 않았나요? 다음 옵션을 시도하세요:', androidNoscript: '기기를 감지하고 올바른 APK를 찾으려면 JavaScript가 필요합니다. JavaScript를 활성화하거나 저장소를 직접 방문하세요.', androidNoscriptHome: 'install.cat으로' },
+      mr: { androidLoading: 'तुमचे डिव्हाइस ओळखत आहे आणि डाउनलोड करत आहे...', androidError: 'या प्रकल्पासाठी कोणतेही Android अॅप सापडले नाही', androidViewReleases: 'सर्व रिलीझ पहा', androidViewRepo: 'रिपॉजिटरी पहा', androidDownloadApk: 'APK डाउनलोड करा', androidFallbackHint: 'डाउनलोड सुरू झाले नाही? या पर्याय वापरा:', androidNoscript: 'तुमचे डिव्हाइस ओळखण्यासाठी आणि योग्य APK शोधण्यासाठी JavaScript आवश्यक आहे. कृपया JavaScript सक्षम करा किंवा थेट रिपॉजिटरी भेट द्या.', androidNoscriptHome: 'install.cat वर जा' },
+      ru: { androidLoading: 'Определение устройства и загрузка...', androidError: 'Android-приложение для этого проекта не найдено', androidViewReleases: 'Посмотреть все релизы', androidViewRepo: 'Посмотреть репозиторий', androidDownloadApk: 'Скачать APK', androidFallbackHint: 'Загрузка не началась? Попробуйте эти варианты:', androidNoscript: 'Для определения вашего устройства и поиска нужного APK требуется JavaScript. Пожалуйста, включите JavaScript или посетите репозиторий напрямую.', androidNoscriptHome: 'Перейти на install.cat' },
+      sw: { androidLoading: 'Inatambua kifaa chako na kupakua...', androidError: 'Hakuna app ya Android iliyopatikana kwa mradi huu', androidViewReleases: 'Tazama matoleo yote', androidViewRepo: 'Tazama hazina', androidDownloadApk: 'Pakua APK', androidFallbackHint: 'Upakuaji haukuanza? Jaribu chaguo hizi:', androidNoscript: 'JavaScript inahitajika kutambua kifaa chako na kupata APK sahihi. Tafadhali washa JavaScript au tembelea hazina moja kwa moja.', androidNoscriptHome: 'Nenda install.cat' },
+      ur: { androidLoading: 'آپ کا آلہ پہچانا جا رہا ہے اور ڈاؤن لوڈ ہو رہا ہے...', androidError: 'اس پروجیکٹ کے لیے کوئی Android ایپ نہیں ملی', androidViewReleases: 'تمام ریلیزز دیکھیں', androidViewRepo: 'ذخیرہ دیکھیں', androidDownloadApk: 'APK ڈاؤن لوڈ کریں', androidFallbackHint: 'ڈاؤن لوڈ شروع نہیں ہوا؟ یہ اختیارات آزمائیں:', androidNoscript: 'آپ کے آلے کی شناخت اور صحیح APK تلاش کرنے کے لیے JavaScript ضروری ہے۔ براہ کرم JavaScript فعال کریں یا براہ راست ذخیرے پر جائیں۔', androidNoscriptHome: 'install.cat پر جائیں' },
+      zh: { androidLoading: '正在检测您的设备并下载...', androidError: '未找到此项目的 Android 应用', androidViewReleases: '查看所有版本', androidViewRepo: '查看仓库', androidDownloadApk: '下载 APK', androidFallbackHint: '下载未开始？试试以下选项：', androidNoscript: '需要 JavaScript 来检测您的设备并找到正确的 APK。请启用 JavaScript 或直接访问仓库。', androidNoscriptHome: '前往 install.cat' }
     };
 
     function detectLanguage() {
@@ -206,7 +276,19 @@
       document.getElementById('error-detail').textContent = detail || '';
       if (repo) {
         document.getElementById('releases-link').href = `https://github.com/${repo}/releases`;
+        document.getElementById('repo-error-link').href = `https://github.com/${repo}`;
       }
+    }
+
+    // Show fallback buttons after download redirect (in case it didn't work)
+    function showFallback(apkUrl, repo) {
+      document.getElementById('download-btn').href = apkUrl;
+      document.getElementById('repo-link').href = `https://github.com/${repo}`;
+      document.getElementById('releases-fallback-link').href = `https://github.com/${repo}/releases`;
+      // Show fallback after a short delay so the user sees the spinner first
+      setTimeout(() => {
+        document.getElementById('fallback').classList.add('visible');
+      }, 3000);
     }
 
     // Detect device architecture via User-Agent Client Hints API, fallback to arm64
@@ -305,6 +387,8 @@
 
       if (apk) {
         window.location.href = apk.browser_download_url;
+        // Show fallback buttons in case the download redirect didn't work
+        showFallback(apk.browser_download_url, repo);
       } else {
         // No APK in releases — redirect to repo home
         window.location.href = `https://github.com/${repo}`;

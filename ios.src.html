@@ -182,9 +182,39 @@
 
     .releases-link:hover { text-decoration: underline; }
 
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.6rem 1.2rem;
+      background: var(--bg-secondary);
+      color: var(--text);
+      text-decoration: none;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      font-weight: 500;
+      font-size: 0.9rem;
+      transition: border-color 0.2s, background 0.2s;
+    }
+
+    .btn-secondary:hover {
+      border-color: var(--accent);
+      background: var(--code-bg);
+    }
+
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(-10px); }
       to { opacity: 1; transform: translateY(0); }
+    }
+
+    noscript p {
+      font-size: 1.1rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    noscript a {
+      color: var(--accent);
     }
   </style>
 </head>
@@ -205,6 +235,8 @@
       <a class="btn btn-success" id="download-link" href="#" data-i18n="iosDownloadIpa">Download IPA</a>
       <p class="sideload-hint" data-i18n="iosSideloadHint">To install, transfer to your computer and use AltStore or Sideloadly</p>
       <a class="releases-link" id="found-releases-link" href="#" data-i18n="iosViewReleases">View all releases</a>
+      <br>
+      <a class="btn-secondary" id="repo-found-link" href="#" style="margin-top:0.5rem" data-i18n="iosViewRepo">View repository</a>
       <a class="home-link" href="/">🐱 install.cat</a>
     </div>
 
@@ -214,29 +246,38 @@
       <p class="error-title" data-i18n="iosError">No iOS app found for this project</p>
       <p class="error-detail" id="error-detail"></p>
       <a class="btn" id="releases-link" href="#" data-i18n="iosViewReleases">View all releases</a>
+      <br>
+      <a class="btn-secondary" id="repo-error-link" href="#" style="margin-top:0.75rem" data-i18n="iosViewRepo">View repository</a>
       <a class="home-link" href="/">🐱 install.cat</a>
     </div>
+
+    <noscript>
+      <div class="logo">🐱</div>
+      <p data-i18n="iosNoscript">JavaScript is required to check for iOS apps. Please enable JavaScript or visit the repository directly.</p>
+      <br>
+      <a class="btn" href="/" data-i18n="iosNoscriptHome">Go to install.cat</a>
+    </noscript>
   </div>
 
   <script>
     const translations = {
-      en: { iosLoading: 'Checking for iOS app...', iosError: 'No iOS app found for this project', iosViewReleases: 'View all releases', iosDownloadIpa: 'Download IPA', iosSideloadHint: 'To install, transfer to your computer and use AltStore or Sideloadly', iosFoundTitle: 'iOS app found' },
-      pt: { iosLoading: 'Verificando app iOS...', iosError: 'Nenhum app iOS encontrado para este projeto', iosViewReleases: 'Ver todas as releases', iosDownloadIpa: 'Baixar IPA', iosSideloadHint: 'Para instalar, transfira para seu computador e use AltStore ou Sideloadly', iosFoundTitle: 'App iOS encontrado' },
-      ca: { iosLoading: "Comprovant l'app iOS...", iosError: "No s'ha trobat cap app iOS per a aquest projecte", iosViewReleases: 'Veure totes les releases', iosDownloadIpa: 'Descarregar IPA', iosSideloadHint: "Per instal·lar, transfereix al teu ordinador i usa AltStore o Sideloadly", iosFoundTitle: 'App iOS trobada' },
-      ar: { iosLoading: 'جاري التحقق من تطبيق iOS...', iosError: 'لم يتم العثور على تطبيق iOS لهذا المشروع', iosViewReleases: 'عرض جميع الإصدارات', iosDownloadIpa: 'تحميل IPA', iosSideloadHint: 'للتثبيت، انقل إلى جهاز الكمبيوتر واستخدم AltStore أو Sideloadly', iosFoundTitle: 'تم العثور على تطبيق iOS' },
-      bn: { iosLoading: 'iOS অ্যাপ খুঁজছে...', iosError: 'এই প্রকল্পের জন্য কোনো iOS অ্যাপ পাওয়া যায়নি', iosViewReleases: 'সমস্ত রিলিজ দেখুন', iosDownloadIpa: 'IPA ডাউনলোড করুন', iosSideloadHint: 'ইনস্টল করতে, আপনার কম্পিউটারে স্থানান্তর করুন এবং AltStore বা Sideloadly ব্যবহার করুন', iosFoundTitle: 'iOS অ্যাপ পাওয়া গেছে' },
-      de: { iosLoading: 'Suche nach iOS-App...', iosError: 'Keine iOS-App für dieses Projekt gefunden', iosViewReleases: 'Alle Releases anzeigen', iosDownloadIpa: 'IPA herunterladen', iosSideloadHint: 'Zur Installation auf den Computer übertragen und AltStore oder Sideloadly verwenden', iosFoundTitle: 'iOS-App gefunden' },
-      es: { iosLoading: 'Buscando app iOS...', iosError: 'No se encontró app iOS para este proyecto', iosViewReleases: 'Ver todas las releases', iosDownloadIpa: 'Descargar IPA', iosSideloadHint: 'Para instalar, transfiere a tu computadora y usa AltStore o Sideloadly', iosFoundTitle: 'App iOS encontrada' },
-      fr: { iosLoading: "Recherche de l'app iOS...", iosError: "Aucune app iOS trouvée pour ce projet", iosViewReleases: 'Voir toutes les releases', iosDownloadIpa: "Télécharger l'IPA", iosSideloadHint: "Pour installer, transférez sur votre ordinateur et utilisez AltStore ou Sideloadly", iosFoundTitle: 'App iOS trouvée' },
-      hi: { iosLoading: 'iOS ऐप खोज रहे हैं...', iosError: 'इस प्रोजेक्ट के लिए कोई iOS ऐप नहीं मिला', iosViewReleases: 'सभी रिलीज़ देखें', iosDownloadIpa: 'IPA डाउनलोड करें', iosSideloadHint: 'इंस्टॉल करने के लिए, अपने कंप्यूटर पर ट्रांसफर करें और AltStore या Sideloadly का उपयोग करें', iosFoundTitle: 'iOS ऐप मिला' },
-      id: { iosLoading: 'Mencari app iOS...', iosError: 'Tidak ditemukan app iOS untuk proyek ini', iosViewReleases: 'Lihat semua rilis', iosDownloadIpa: 'Unduh IPA', iosSideloadHint: 'Untuk menginstal, transfer ke komputer Anda dan gunakan AltStore atau Sideloadly', iosFoundTitle: 'App iOS ditemukan' },
-      ja: { iosLoading: 'iOSアプリを確認中...', iosError: 'このプロジェクトのiOSアプリが見つかりません', iosViewReleases: 'すべてのリリースを見る', iosDownloadIpa: 'IPAをダウンロード', iosSideloadHint: 'インストールするには、コンピュータに転送してAltStoreまたはSideloadlyを使用してください', iosFoundTitle: 'iOSアプリが見つかりました' },
-      ko: { iosLoading: 'iOS 앱 확인 중...', iosError: '이 프로젝트의 iOS 앱을 찾을 수 없습니다', iosViewReleases: '모든 릴리스 보기', iosDownloadIpa: 'IPA 다운로드', iosSideloadHint: '설치하려면 컴퓨터로 전송한 후 AltStore 또는 Sideloadly를 사용하세요', iosFoundTitle: 'iOS 앱 발견' },
-      mr: { iosLoading: 'iOS अॅप शोधत आहे...', iosError: 'या प्रकल्पासाठी कोणतेही iOS अॅप सापडले नाही', iosViewReleases: 'सर्व रिलीझ पहा', iosDownloadIpa: 'IPA डाउनलोड करा', iosSideloadHint: 'इन्स्टॉल करण्यासाठी, आपल्या संगणकावर हस्तांतरित करा आणि AltStore किंवा Sideloadly वापरा', iosFoundTitle: 'iOS अॅप सापडले' },
-      ru: { iosLoading: 'Поиск iOS-приложения...', iosError: 'iOS-приложение для этого проекта не найдено', iosViewReleases: 'Посмотреть все релизы', iosDownloadIpa: 'Скачать IPA', iosSideloadHint: 'Для установки перенесите на компьютер и используйте AltStore или Sideloadly', iosFoundTitle: 'iOS-приложение найдено' },
-      sw: { iosLoading: 'Inatafuta app ya iOS...', iosError: 'Hakuna app ya iOS iliyopatikana kwa mradi huu', iosViewReleases: 'Tazama matoleo yote', iosDownloadIpa: 'Pakua IPA', iosSideloadHint: 'Ili kusakinisha, hamisha kwenye kompyuta yako na utumie AltStore au Sideloadly', iosFoundTitle: 'App ya iOS imepatikana' },
-      ur: { iosLoading: 'iOS ایپ تلاش کر رہے ہیں...', iosError: 'اس پروجیکٹ کے لیے کوئی iOS ایپ نہیں ملی', iosViewReleases: 'تمام ریلیزز دیکھیں', iosDownloadIpa: 'IPA ڈاؤن لوڈ کریں', iosSideloadHint: 'انسٹال کرنے کے لیے، اپنے کمپیوٹر پر منتقل کریں اور AltStore یا Sideloadly استعمال کریں', iosFoundTitle: 'iOS ایپ مل گئی' },
-      zh: { iosLoading: '正在检查 iOS 应用...', iosError: '未找到此项目的 iOS 应用', iosViewReleases: '查看所有版本', iosDownloadIpa: '下载 IPA', iosSideloadHint: '要安装，请传输到您的电脑并使用 AltStore 或 Sideloadly', iosFoundTitle: '找到 iOS 应用' }
+      en: { iosLoading: 'Checking for iOS app...', iosError: 'No iOS app found for this project', iosViewReleases: 'View all releases', iosViewRepo: 'View repository', iosDownloadIpa: 'Download IPA', iosSideloadHint: 'To install, transfer to your computer and use AltStore or Sideloadly', iosFoundTitle: 'iOS app found', iosNoscript: 'JavaScript is required to check for iOS apps. Please enable JavaScript or visit the repository directly.', iosNoscriptHome: 'Go to install.cat' },
+      pt: { iosLoading: 'Verificando app iOS...', iosError: 'Nenhum app iOS encontrado para este projeto', iosViewReleases: 'Ver todas as releases', iosViewRepo: 'Ver repositório', iosDownloadIpa: 'Baixar IPA', iosSideloadHint: 'Para instalar, transfira para seu computador e use AltStore ou Sideloadly', iosFoundTitle: 'App iOS encontrado', iosNoscript: 'JavaScript é necessário para verificar apps iOS. Ative o JavaScript ou visite o repositório diretamente.', iosNoscriptHome: 'Ir para install.cat' },
+      ca: { iosLoading: "Comprovant l'app iOS...", iosError: "No s'ha trobat cap app iOS per a aquest projecte", iosViewReleases: 'Veure totes les releases', iosViewRepo: 'Veure repositori', iosDownloadIpa: 'Descarregar IPA', iosSideloadHint: "Per instal·lar, transfereix al teu ordinador i usa AltStore o Sideloadly", iosFoundTitle: 'App iOS trobada', iosNoscript: "Cal JavaScript per comprovar apps iOS. Activa JavaScript o visita el repositori directament.", iosNoscriptHome: 'Anar a install.cat' },
+      ar: { iosLoading: 'جاري التحقق من تطبيق iOS...', iosError: 'لم يتم العثور على تطبيق iOS لهذا المشروع', iosViewReleases: 'عرض جميع الإصدارات', iosViewRepo: 'عرض المستودع', iosDownloadIpa: 'تحميل IPA', iosSideloadHint: 'للتثبيت، انقل إلى جهاز الكمبيوتر واستخدم AltStore أو Sideloadly', iosFoundTitle: 'تم العثور على تطبيق iOS', iosNoscript: 'JavaScript مطلوب للتحقق من تطبيقات iOS. يرجى تفعيل JavaScript أو زيارة المستودع مباشرة.', iosNoscriptHome: 'الذهاب إلى install.cat' },
+      bn: { iosLoading: 'iOS অ্যাপ খুঁজছে...', iosError: 'এই প্রকল্পের জন্য কোনো iOS অ্যাপ পাওয়া যায়নি', iosViewReleases: 'সমস্ত রিলিজ দেখুন', iosViewRepo: 'রিপোজিটরি দেখুন', iosDownloadIpa: 'IPA ডাউনলোড করুন', iosSideloadHint: 'ইনস্টল করতে, আপনার কম্পিউটারে স্থানান্তর করুন এবং AltStore বা Sideloadly ব্যবহার করুন', iosFoundTitle: 'iOS অ্যাপ পাওয়া গেছে', iosNoscript: 'iOS অ্যাপ যাচাই করতে JavaScript প্রয়োজন। দয়া করে JavaScript সক্রিয় করুন বা সরাসরি রিপোজিটরি ভিজিট করুন।', iosNoscriptHome: 'install.cat এ যান' },
+      de: { iosLoading: 'Suche nach iOS-App...', iosError: 'Keine iOS-App für dieses Projekt gefunden', iosViewReleases: 'Alle Releases anzeigen', iosViewRepo: 'Repository ansehen', iosDownloadIpa: 'IPA herunterladen', iosSideloadHint: 'Zur Installation auf den Computer übertragen und AltStore oder Sideloadly verwenden', iosFoundTitle: 'iOS-App gefunden', iosNoscript: 'JavaScript wird benötigt, um iOS-Apps zu überprüfen. Bitte aktivieren Sie JavaScript oder besuchen Sie das Repository direkt.', iosNoscriptHome: 'Zu install.cat' },
+      es: { iosLoading: 'Buscando app iOS...', iosError: 'No se encontró app iOS para este proyecto', iosViewReleases: 'Ver todas las releases', iosViewRepo: 'Ver repositorio', iosDownloadIpa: 'Descargar IPA', iosSideloadHint: 'Para instalar, transfiere a tu computadora y usa AltStore o Sideloadly', iosFoundTitle: 'App iOS encontrada', iosNoscript: 'Se requiere JavaScript para verificar apps iOS. Activa JavaScript o visita el repositorio directamente.', iosNoscriptHome: 'Ir a install.cat' },
+      fr: { iosLoading: "Recherche de l'app iOS...", iosError: "Aucune app iOS trouvée pour ce projet", iosViewReleases: 'Voir toutes les releases', iosViewRepo: 'Voir le dépôt', iosDownloadIpa: "Télécharger l'IPA", iosSideloadHint: "Pour installer, transférez sur votre ordinateur et utilisez AltStore ou Sideloadly", iosFoundTitle: 'App iOS trouvée', iosNoscript: "JavaScript est requis pour vérifier les apps iOS. Veuillez activer JavaScript ou visitez le dépôt directement.", iosNoscriptHome: 'Aller à install.cat' },
+      hi: { iosLoading: 'iOS ऐप खोज रहे हैं...', iosError: 'इस प्रोजेक्ट के लिए कोई iOS ऐप नहीं मिला', iosViewReleases: 'सभी रिलीज़ देखें', iosViewRepo: 'रिपॉजिटरी देखें', iosDownloadIpa: 'IPA डाउनलोड करें', iosSideloadHint: 'इंस्टॉल करने के लिए, अपने कंप्यूटर पर ट्रांसफर करें और AltStore या Sideloadly का उपयोग करें', iosFoundTitle: 'iOS ऐप मिला', iosNoscript: 'iOS ऐप्स जांचने के लिए JavaScript आवश्यक है। कृपया JavaScript सक्षम करें या सीधे रिपॉजिटरी पर जाएं।', iosNoscriptHome: 'install.cat पर जाएं' },
+      id: { iosLoading: 'Mencari app iOS...', iosError: 'Tidak ditemukan app iOS untuk proyek ini', iosViewReleases: 'Lihat semua rilis', iosViewRepo: 'Lihat repositori', iosDownloadIpa: 'Unduh IPA', iosSideloadHint: 'Untuk menginstal, transfer ke komputer Anda dan gunakan AltStore atau Sideloadly', iosFoundTitle: 'App iOS ditemukan', iosNoscript: 'JavaScript diperlukan untuk memeriksa app iOS. Silakan aktifkan JavaScript atau kunjungi repositori langsung.', iosNoscriptHome: 'Ke install.cat' },
+      ja: { iosLoading: 'iOSアプリを確認中...', iosError: 'このプロジェクトのiOSアプリが見つかりません', iosViewReleases: 'すべてのリリースを見る', iosViewRepo: 'リポジトリを見る', iosDownloadIpa: 'IPAをダウンロード', iosSideloadHint: 'インストールするには、コンピュータに転送してAltStoreまたはSideloadlyを使用してください', iosFoundTitle: 'iOSアプリが見つかりました', iosNoscript: 'iOSアプリを確認するにはJavaScriptが必要です。JavaScriptを有効にするか、リポジトリを直接ご覧ください。', iosNoscriptHome: 'install.catへ' },
+      ko: { iosLoading: 'iOS 앱 확인 중...', iosError: '이 프로젝트의 iOS 앱을 찾을 수 없습니다', iosViewReleases: '모든 릴리스 보기', iosViewRepo: '저장소 보기', iosDownloadIpa: 'IPA 다운로드', iosSideloadHint: '설치하려면 컴퓨터로 전송한 후 AltStore 또는 Sideloadly를 사용하세요', iosFoundTitle: 'iOS 앱 발견', iosNoscript: 'iOS 앱을 확인하려면 JavaScript가 필요합니다. JavaScript를 활성화하거나 저장소를 직접 방문하세요.', iosNoscriptHome: 'install.cat으로' },
+      mr: { iosLoading: 'iOS अॅप शोधत आहे...', iosError: 'या प्रकल्पासाठी कोणतेही iOS अॅप सापडले नाही', iosViewReleases: 'सर्व रिलीझ पहा', iosViewRepo: 'रिपॉजिटरी पहा', iosDownloadIpa: 'IPA डाउनलोड करा', iosSideloadHint: 'इन्स्टॉल करण्यासाठी, आपल्या संगणकावर हस्तांतरित करा आणि AltStore किंवा Sideloadly वापरा', iosFoundTitle: 'iOS अॅप सापडले', iosNoscript: 'iOS अॅप तपासण्यासाठी JavaScript आवश्यक आहे. कृपया JavaScript सक्षम करा किंवा थेट रिपॉजिटरी भेट द्या.', iosNoscriptHome: 'install.cat वर जा' },
+      ru: { iosLoading: 'Поиск iOS-приложения...', iosError: 'iOS-приложение для этого проекта не найдено', iosViewReleases: 'Посмотреть все релизы', iosViewRepo: 'Посмотреть репозиторий', iosDownloadIpa: 'Скачать IPA', iosSideloadHint: 'Для установки перенесите на компьютер и используйте AltStore или Sideloadly', iosFoundTitle: 'iOS-приложение найдено', iosNoscript: 'Для проверки iOS-приложений требуется JavaScript. Пожалуйста, включите JavaScript или посетите репозиторий напрямую.', iosNoscriptHome: 'Перейти на install.cat' },
+      sw: { iosLoading: 'Inatafuta app ya iOS...', iosError: 'Hakuna app ya iOS iliyopatikana kwa mradi huu', iosViewReleases: 'Tazama matoleo yote', iosViewRepo: 'Tazama hazina', iosDownloadIpa: 'Pakua IPA', iosSideloadHint: 'Ili kusakinisha, hamisha kwenye kompyuta yako na utumie AltStore au Sideloadly', iosFoundTitle: 'App ya iOS imepatikana', iosNoscript: 'JavaScript inahitajika kuangalia app za iOS. Tafadhali washa JavaScript au tembelea hazina moja kwa moja.', iosNoscriptHome: 'Nenda install.cat' },
+      ur: { iosLoading: 'iOS ایپ تلاش کر رہے ہیں...', iosError: 'اس پروجیکٹ کے لیے کوئی iOS ایپ نہیں ملی', iosViewReleases: 'تمام ریلیزز دیکھیں', iosViewRepo: 'ذخیرہ دیکھیں', iosDownloadIpa: 'IPA ڈاؤن لوڈ کریں', iosSideloadHint: 'انسٹال کرنے کے لیے، اپنے کمپیوٹر پر منتقل کریں اور AltStore یا Sideloadly استعمال کریں', iosFoundTitle: 'iOS ایپ مل گئی', iosNoscript: 'iOS ایپس چیک کرنے کے لیے JavaScript ضروری ہے۔ براہ کرم JavaScript فعال کریں یا براہ راست ذخیرے پر جائیں۔', iosNoscriptHome: 'install.cat پر جائیں' },
+      zh: { iosLoading: '正在检查 iOS 应用...', iosError: '未找到此项目的 iOS 应用', iosViewReleases: '查看所有版本', iosViewRepo: '查看仓库', iosDownloadIpa: '下载 IPA', iosSideloadHint: '要安装，请传输到您的电脑并使用 AltStore 或 Sideloadly', iosFoundTitle: '找到 iOS 应用', iosNoscript: '需要 JavaScript 来检查 iOS 应用。请启用 JavaScript 或直接访问仓库。', iosNoscriptHome: '前往 install.cat' }
     };
 
     function detectLanguage() {
@@ -264,6 +305,7 @@
       document.getElementById('error-detail').textContent = detail || '';
       if (repo) {
         document.getElementById('releases-link').href = `https://github.com/${repo}/releases`;
+        document.getElementById('repo-error-link').href = `https://github.com/${repo}`;
       }
     }
 
@@ -275,6 +317,7 @@
       document.getElementById('found-detail').textContent = ipa.name;
       document.getElementById('download-link').href = ipa.browser_download_url;
       document.getElementById('found-releases-link').href = `https://github.com/${repo}/releases`;
+      document.getElementById('repo-found-link').href = `https://github.com/${repo}`;
     }
 
     // Find the best matching IPA from release assets
