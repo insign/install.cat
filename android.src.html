@@ -261,7 +261,7 @@
         return;
       }
 
-      // Check if the repo has its own android.html
+      // Check if the repo has its own android.html (full override)
       try {
         const checkUrl = `https://raw.githubusercontent.com/${repo}/refs/heads/main/android.html`;
         const head = await fetch(checkUrl, { method: 'HEAD' });
@@ -273,19 +273,30 @@
         // 404 or network error, proceed with default flow
       }
 
+      // Check if the repo has an android.txt (custom URL redirect)
+      try {
+        const txtUrl = `https://raw.githubusercontent.com/${repo}/refs/heads/main/android.txt`;
+        const txtRes = await fetch(txtUrl);
+        if (txtRes.ok) {
+          const url = (await txtRes.text()).trim().split('\n')[0].trim();
+          if (url) {
+            window.location.href = url;
+            return;
+          }
+        }
+      } catch (e) {
+        // 404 or network error, proceed with default flow
+      }
+
       // Detect architecture and fetch release in parallel
       const [arch, releaseRes] = await Promise.all([
         detectArch(),
         fetch(`https://api.github.com/repos/${repo}/releases/latest`).catch(() => null)
       ]);
 
+      // No releases or API error — redirect to repo home
       if (!releaseRes || !releaseRes.ok) {
-        showError(
-          releaseRes?.status === 404
-            ? 'No releases found for this repository.'
-            : 'Could not fetch release information.',
-          repo
-        );
+        window.location.href = `https://github.com/${repo}`;
         return;
       }
 
@@ -295,7 +306,8 @@
       if (apk) {
         window.location.href = apk.browser_download_url;
       } else {
-        showError('No APK found in the latest release.', repo);
+        // No APK in releases — redirect to repo home
+        window.location.href = `https://github.com/${repo}`;
       }
     }
 

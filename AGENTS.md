@@ -7,11 +7,13 @@ index.src.html    # Main page source (edit this)
 index.html        # Minified output (generated, do not edit)
 android.src.html  # Android APK redirect page source (edit this)
 android.html      # Minified output (generated, do not edit)
+ios.src.html      # iOS IPA/App Store redirect page source (edit this)
+ios.html          # Minified output (generated, do not edit)
 ```
 
 ## Rules
 
-1. **Never edit `index.html` or `android.html` directly** - they are auto-generated
+1. **Never edit `index.html`, `android.html` or `ios.html` directly** - they are auto-generated
 2. **Always edit `*.src.html` files** - these are the source of truth
 3. A git pre-commit hook automatically runs `minhtml` and stages minified outputs when source files are committed
 4. **Commit both files** - source and minified together (handled by the hook)

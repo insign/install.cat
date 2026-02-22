@@ -9,7 +9,12 @@ let exact=apks.find(a=>a.name===`${repoName}-android-${arch}.apk`);if(exact)retu
 let archLower=arch.toLowerCase();
 // Priority 4: any APK at all
 return apks.find(a=>{let name=a.name.toLowerCase();return name.includes(`android`)&&name.includes(archLower)})||apks.find(a=>a.name.toLowerCase().includes(`android`))||apks[0]}async function main(){applyTranslations(detectLanguage());let repo=new URLSearchParams(window.location.search).get(`gh`);if(!repo||!repo.match(/^[a-zA-Z0-9_.-]+\/[a-zA-Z0-9_.-]+$/)){showError(`Invalid or missing ?gh=user/repo parameter`,null);return}
-// Check if the repo has its own android.html
+// Check if the repo has its own android.html (full override)
 try{let checkUrl=`https://raw.githubusercontent.com/${repo}/refs/heads/main/android.html`;if((await fetch(checkUrl,{method:`HEAD`})).ok){window.location.href=checkUrl;return}}catch{}
+// Check if the repo has an android.txt (custom URL redirect)
+try{let txtUrl=`https://raw.githubusercontent.com/${repo}/refs/heads/main/android.txt`,txtRes=await fetch(txtUrl);if(txtRes.ok){let url=(await txtRes.text()).trim().split(`
+`)[0].trim();if(url){window.location.href=url;return}}}catch{}
 // Detect architecture and fetch release in parallel
-let[arch,releaseRes]=await Promise.all([detectArch(),fetch(`https://api.github.com/repos/${repo}/releases/latest`).catch(()=>null)]);if(!releaseRes||!releaseRes.ok){showError(releaseRes?.status===404?`No releases found for this repository.`:`Could not fetch release information.`,repo);return}let apk=findApk((await releaseRes.json()).assets||[],repo,arch);apk?window.location.href=apk.browser_download_url:showError(`No APK found in the latest release.`,repo)}main();</script>
+let[arch,releaseRes]=await Promise.all([detectArch(),fetch(`https://api.github.com/repos/${repo}/releases/latest`).catch(()=>null)]);
+// No releases or API error — redirect to repo home
+if(!releaseRes||!releaseRes.ok){window.location.href=`https://github.com/${repo}`;return}let apk=findApk((await releaseRes.json()).assets||[],repo,arch);apk?window.location.href=apk.browser_download_url:window.location.href=`https://github.com/${repo}`}main();</script>
