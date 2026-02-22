@@ -146,7 +146,7 @@ curl -s -X POST "https://api.cloudflare.com/client/v4/zones/$ZONE_ID/rulesets" \
     },
     {
       "action": "redirect",
-      "expression": "(http.user_agent contains \"curl\" and http.request.uri wildcard r\"/*/*\")",
+      "expression": "(http.user_agent contains \"curl\" and http.request.uri.path wildcard r\"/*/*\")",
       "description": "curl → install.sh",
       "enabled": true,
       "action_parameters": {
@@ -161,7 +161,7 @@ curl -s -X POST "https://api.cloudflare.com/client/v4/zones/$ZONE_ID/rulesets" \
     },
     {
       "action": "redirect",
-      "expression": "(http.user_agent contains \"Wget\" and http.request.uri wildcard r\"/*/*\")",
+      "expression": "(http.user_agent contains \"Wget\" and http.request.uri.path wildcard r\"/*/*\")",
       "description": "wget → install.sh",
       "enabled": true,
       "action_parameters": {
@@ -176,7 +176,7 @@ curl -s -X POST "https://api.cloudflare.com/client/v4/zones/$ZONE_ID/rulesets" \
     },
     {
       "action": "redirect",
-      "expression": "(http.user_agent contains \"PowerShell\" and http.request.uri wildcard r\"/*/*\")",
+      "expression": "(http.user_agent contains \"PowerShell\" and http.request.uri.path wildcard r\"/*/*\")",
       "description": "PowerShell → install.ps1",
       "enabled": true,
       "action_parameters": {
@@ -191,7 +191,7 @@ curl -s -X POST "https://api.cloudflare.com/client/v4/zones/$ZONE_ID/rulesets" \
     },
     {
       "action": "redirect",
-      "expression": "(http.user_agent contains \"iPhone\" or http.user_agent contains \"iPad\") and http.request.uri wildcard r\"/*/*\"",
+      "expression": "(http.user_agent contains \"iPhone\" or http.user_agent contains \"iPad\") and http.request.uri.path wildcard r\"/*/*\"",
       "description": "iOS → ios.html",
       "enabled": true,
       "action_parameters": {
@@ -206,7 +206,7 @@ curl -s -X POST "https://api.cloudflare.com/client/v4/zones/$ZONE_ID/rulesets" \
     },
     {
       "action": "redirect",
-      "expression": "(http.request.uri wildcard r\"/*/*\")",
+      "expression": "(http.request.uri.path wildcard r\"/*/*\")",
       "description": "Browser → GitHub repo",
       "enabled": true,
       "action_parameters": {
