@@ -249,6 +249,49 @@
       height: 14px;
     }
 
+    /* wget toggle */
+    .tool-toggle {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      margin-left: auto;
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .tool-toggle input { display: none; }
+
+    .toggle-track {
+      width: 28px;
+      height: 16px;
+      background: var(--border);
+      border-radius: 8px;
+      position: relative;
+      transition: background 0.2s;
+    }
+
+    .toggle-track::after {
+      content: '';
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      width: 12px;
+      height: 12px;
+      background: white;
+      border-radius: 50%;
+      transition: transform 0.2s;
+    }
+
+    .tool-toggle input:checked ~ .toggle-track {
+      background: var(--accent);
+    }
+
+    .tool-toggle input:checked ~ .toggle-track::after {
+      transform: translateX(12px);
+    }
+
     /* Syntax highlighting */
     .syn-cmd { color: var(--syn-cmd); font-weight: 600; }
     .syn-flag { color: var(--syn-flag); }
@@ -513,9 +556,17 @@
         </div>
         <div class="commands">
           <div class="command-block">
-            <div class="command-label">Linux & macOS</div>
+            <div class="command-label" style="display:flex;align-items:center">
+              Linux & macOS
+              <label class="tool-toggle" data-i18n-title="useWget">
+                <span>curl</span>
+                <input type="checkbox" id="wget-toggle">
+                <span class="toggle-track"></span>
+                <span>wget</span>
+              </label>
+            </div>
             <div class="command-content">
-              <code><span class="syn-cmd">curl</span> <span class="syn-flag">-fsSL</span> <span class="syn-url">install.cat/verseles/ask</span> <span class="syn-pipe">|</span> <span class="syn-cmd">sh</span></code>
+              <code id="example-unix"><span class="syn-cmd">curl</span> <span class="syn-flag">-fsSL</span> <span class="syn-url">install.cat/verseles/ask</span> <span class="syn-pipe">|</span> <span class="syn-cmd">sh</span></code>
               <button class="copy-btn" data-copy="curl -fsSL install.cat/verseles/ask | sh">
                 <svg class="icon-copy" viewBox="0 0 16 16" fill="currentColor"><path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25Z"/><path d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0 1 14.25 11h-7.5A1.75 1.75 0 0 1 5 9.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z"/></svg>
                 <svg class="icon-check" viewBox="0 0 16 16" fill="currentColor" style="display:none"><path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"/></svg>
@@ -606,7 +657,6 @@
           <ul>
             <li><span data-i18n="tip1">No need to add</span> <code>https://</code></li>
             <li><span data-i18n="tip2">No need to add</span> <code>.sh</code> <span data-i18n="tip2b">or</span> <code>.ps1</code></li>
-            <li><span data-i18n="tip3">Also works with</span> <code>wget -O-</code></li>
           </ul>
         </div>
       </div>
@@ -645,7 +695,6 @@
         tip1: 'No need to add',
         tip2: 'No need to add',
         tip2b: 'or',
-        tip3: 'Also works with',
         footer: 'Made with',
         footerBy: 'by'
       },
@@ -673,7 +722,6 @@
         tip1: 'Não precisa adicionar',
         tip2: 'Não precisa adicionar',
         tip2b: 'ou',
-        tip3: 'Também funciona com',
         footer: 'Feito com',
         footerBy: 'por'
       },
@@ -701,7 +749,6 @@
         tip1: 'No cal afegir',
         tip2: 'No cal afegir',
         tip2b: 'o',
-        tip3: 'També funciona amb',
         footer: 'Fet amb',
         footerBy: 'per'
       },
@@ -729,7 +776,6 @@
         tip1: 'لا حاجة لإضافة',
         tip2: 'لا حاجة لإضافة',
         tip2b: 'أو',
-        tip3: 'يعمل أيضاً مع',
         footer: 'صنع بـ',
         footerBy: 'بواسطة'
       },
@@ -757,7 +803,6 @@
         tip1: 'যোগ করার প্রয়োজন নেই',
         tip2: 'যোগ করার প্রয়োজন নেই',
         tip2b: 'বা',
-        tip3: 'এটিও কাজ করে',
         footer: 'তৈরি করা হয়েছে',
         footerBy: 'দ্বারা'
       },
@@ -785,7 +830,6 @@
         tip1: 'Nicht nötig hinzuzufügen',
         tip2: 'Nicht nötig hinzuzufügen',
         tip2b: 'oder',
-        tip3: 'Funktioniert auch mit',
         footer: 'Gemacht mit',
         footerBy: 'von'
       },
@@ -813,7 +857,6 @@
         tip1: 'No necesitas añadir',
         tip2: 'No necesitas añadir',
         tip2b: 'o',
-        tip3: 'También funciona con',
         footer: 'Hecho con',
         footerBy: 'por'
       },
@@ -841,7 +884,6 @@
         tip1: 'Pas besoin d\'ajouter',
         tip2: 'Pas besoin d\'ajouter',
         tip2b: 'ou',
-        tip3: 'Fonctionne aussi avec',
         footer: 'Fait avec',
         footerBy: 'par'
       },
@@ -869,7 +911,6 @@
         tip1: 'जोड़ने की जरूरत नहीं',
         tip2: 'जोड़ने की जरूरत नहीं',
         tip2b: 'या',
-        tip3: 'यह भी काम करता है',
         footer: 'बनाया गया',
         footerBy: 'द्वारा'
       },
@@ -897,7 +938,6 @@
         tip1: 'Tidak perlu menambahkan',
         tip2: 'Tidak perlu menambahkan',
         tip2b: 'atau',
-        tip3: 'Juga berfungsi dengan',
         footer: 'Dibuat dengan',
         footerBy: 'oleh'
       },
@@ -925,7 +965,6 @@
         tip1: '追加不要',
         tip2: '追加不要',
         tip2b: 'または',
-        tip3: 'でも使えます',
         footer: '作成：',
         footerBy: ''
       },
@@ -953,7 +992,6 @@
         tip1: '추가할 필요 없음',
         tip2: '추가할 필요 없음',
         tip2b: '또는',
-        tip3: '도 사용 가능',
         footer: '제작',
         footerBy: ''
       },
@@ -981,7 +1019,6 @@
         tip1: 'जोडण्याची गरज नाही',
         tip2: 'जोडण्याची गरज नाही',
         tip2b: 'किंवा',
-        tip3: 'हे देखील काम करते',
         footer: 'बनवले',
         footerBy: 'द्वारे'
       },
@@ -1009,7 +1046,6 @@
         tip1: 'Не нужно добавлять',
         tip2: 'Не нужно добавлять',
         tip2b: 'или',
-        tip3: 'Также работает с',
         footer: 'Сделано с',
         footerBy: ''
       },
@@ -1037,7 +1073,6 @@
         tip1: 'Hakuna haja ya kuongeza',
         tip2: 'Hakuna haja ya kuongeza',
         tip2b: 'au',
-        tip3: 'Pia inafanya kazi na',
         footer: 'Imeundwa kwa',
         footerBy: 'na'
       },
@@ -1065,7 +1100,6 @@
         tip1: 'شامل کرنے کی ضرورت نہیں',
         tip2: 'شامل کرنے کی ضرورت نہیں',
         tip2b: 'یا',
-        tip3: 'یہ بھی کام کرتا ہے',
         footer: 'بنایا گیا',
         footerBy: 'کی طرف سے'
       },
@@ -1093,7 +1127,6 @@
         tip1: '无需添加',
         tip2: '无需添加',
         tip2b: '或',
-        tip3: '也可以使用',
         footer: '制作者',
         footerBy: ''
       }
@@ -1150,8 +1183,19 @@
         .replace(/'/g, "&#039;");
     }
 
+    function useWget() {
+      return document.getElementById('wget-toggle').checked;
+    }
+
     function highlightUnix(repo) {
+      if (useWget()) {
+        return `<span class="syn-cmd">wget</span> <span class="syn-flag">-O-</span> <span class="syn-url">install.cat/${escapeHtml(repo)}</span> <span class="syn-pipe">|</span> <span class="syn-cmd">sh</span>`;
+      }
       return `<span class="syn-cmd">curl</span> <span class="syn-flag">-fsSL</span> <span class="syn-url">install.cat/${escapeHtml(repo)}</span> <span class="syn-pipe">|</span> <span class="syn-cmd">sh</span>`;
+    }
+
+    function plainUnix(repo) {
+      return useWget() ? `wget -O- install.cat/${repo} | sh` : `curl -fsSL install.cat/${repo} | sh`;
     }
 
     function highlightWin(repo) {
@@ -1199,7 +1243,7 @@
         return;
       }
 
-      const unixCmd = `curl -fsSL install.cat/${repo} | sh`;
+      const unixCmd = plainUnix(repo);
       const winCmd = `irm install.cat/${repo} | iex`;
 
       document.getElementById('gen-unix').innerHTML = highlightUnix(repo);
@@ -1238,6 +1282,16 @@
           }, 2000);
         });
       });
+
+      // wget toggle — update example and generator commands
+      function updateUnixCommands() {
+        const repo = 'verseles/ask';
+        document.getElementById('example-unix').innerHTML = highlightUnix(repo);
+        const copyBtn = document.getElementById('example-unix').closest('.command-content').querySelector('.copy-btn');
+        copyBtn.setAttribute('data-copy', plainUnix(repo));
+        generateCommands(false);
+      }
+      document.getElementById('wget-toggle').addEventListener('change', updateUnixCommands);
 
       // Generator
       document.getElementById('generate-btn').addEventListener('click', () => generateCommands(true));
