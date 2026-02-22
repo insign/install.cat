@@ -42,6 +42,68 @@ npx html-minifier-terser --collapse-whitespace --remove-comments --minify-css --
 4. Commit both `index.src.html` and `index.html`
 5. Push
 
+## Cloudflare Redirect Rules
+
+The domain routing is powered by Cloudflare Dynamic Redirect Rules. Credentials are in env vars `CLOUDFLARE_EMAIL` and `CLOUDFLARE_API_KEY`.
+
+- **Zone ID:** `d39b2dade9417846bb9e925faa7d538d`
+- **Ruleset ID:** `cc9d76824011470daafff070470b34c5`
+- **Phase:** `http_request_dynamic_redirect`
+
+### List current rules
+
+```bash
+curl -s "https://api.cloudflare.com/client/v4/zones/d39b2dade9417846bb9e925faa7d538d/rulesets/cc9d76824011470daafff070470b34c5" \
+  -H "X-Auth-Email: $CLOUDFLARE_EMAIL" \
+  -H "X-Auth-Key: $CLOUDFLARE_API_KEY" | jq '.result.rules[] | {id, description, expression}'
+```
+
+### Update rules
+
+To add or modify rules, send a PUT with **all** rules (existing + new). The API replaces the entire ruleset. Include `id` for existing rules to preserve them; omit `id` for new ones.
+
+```bash
+curl -s -X PUT "https://api.cloudflare.com/client/v4/zones/d39b2dade9417846bb9e925faa7d538d/rulesets/cc9d76824011470daafff070470b34c5" \
+  -H "X-Auth-Email: $CLOUDFLARE_EMAIL" \
+  -H "X-Auth-Key: $CLOUDFLARE_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d @/tmp/cf-rules.json
+```
+
+Write the full rules array to `/tmp/cf-rules.json` first. Format:
+
+```json
+{
+  "rules": [
+    {
+      "id": "existing-rule-id",
+      "action": "redirect",
+      "expression": "(expression here)",
+      "description": "Rule description",
+      "enabled": true,
+      "action_parameters": {
+        "from_value": {
+          "preserve_query_string": true,
+          "status_code": 302,
+          "target_url": {
+            "expression": "wildcard_replace(...)"
+          }
+        }
+      }
+    },
+    {
+      "action": "redirect",
+      "expression": "(new rule expression)",
+      "description": "New rule",
+      "enabled": true,
+      "action_parameters": { "..." : "..." }
+    }
+  ]
+}
+```
+
+**Important:** Rule order matters. Rules are evaluated top-to-bottom; the browser fallback rule (catch-all) must always be last.
+
 ## i18n
 
 The page supports 17 languages via auto-detection (covering the 15 most spoken languages globally + Catalan + Korean):
