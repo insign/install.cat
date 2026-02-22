@@ -64,6 +64,139 @@ The full ruleset:
 5. **PowerShell → install.ps1** — 302 redirect to raw script on GitHub
 6. **Browser → GitHub** — 302 redirect to the repo page
 
+### Self-hosting: create the rules yourself
+
+Want to run your own install domain? You just need a Cloudflare zone. Set your env vars:
+
+```bash
+export CLOUDFLARE_EMAIL="you@example.com"
+export CLOUDFLARE_API_KEY="your-global-api-key"
+export ZONE_ID="your-zone-id"
+```
+
+First, create the ruleset:
+
+```bash
+curl -s -X POST "https://api.cloudflare.com/client/v4/zones/$ZONE_ID/rulesets" \
+  -H "X-Auth-Email: $CLOUDFLARE_EMAIL" \
+  -H "X-Auth-Key: $CLOUDFLARE_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+  "name": "default",
+  "kind": "zone",
+  "phase": "http_request_dynamic_redirect",
+  "rules": [
+    {
+      "action": "redirect",
+      "expression": "(http.request.full_uri wildcard r\"http://*\")",
+      "description": "HTTP to HTTPS",
+      "enabled": true,
+      "action_parameters": {
+        "from_value": {
+          "preserve_query_string": true,
+          "status_code": 301,
+          "target_url": {
+            "expression": "wildcard_replace(http.request.full_uri, r\"http://*\", r\"https://${1}\")"
+          }
+        }
+      }
+    },
+    {
+      "action": "redirect",
+      "expression": "(http.request.full_uri wildcard r\"https://www.*\")",
+      "description": "WWW to root",
+      "enabled": true,
+      "action_parameters": {
+        "from_value": {
+          "preserve_query_string": true,
+          "status_code": 301,
+          "target_url": {
+            "expression": "wildcard_replace(http.request.full_uri, r\"https://www.*\", r\"https://${1}\")"
+          }
+        }
+      }
+    },
+    {
+      "action": "redirect",
+      "expression": "(http.user_agent contains \"curl\" and http.request.uri wildcard r\"/*/*\")",
+      "description": "curl → install.sh",
+      "enabled": true,
+      "action_parameters": {
+        "from_value": {
+          "preserve_query_string": true,
+          "status_code": 302,
+          "target_url": {
+            "expression": "wildcard_replace(http.request.full_uri, r\"https://YOURDOMAIN.COM/*/*\", r\"https://raw.githubusercontent.com/${1}/${2}/refs/heads/main/install.sh\")"
+          }
+        }
+      }
+    },
+    {
+      "action": "redirect",
+      "expression": "(http.user_agent contains \"Wget\" and http.request.uri wildcard r\"/*/*\")",
+      "description": "wget → install.sh",
+      "enabled": true,
+      "action_parameters": {
+        "from_value": {
+          "preserve_query_string": true,
+          "status_code": 302,
+          "target_url": {
+            "expression": "wildcard_replace(http.request.full_uri, r\"https://YOURDOMAIN.COM/*/*\", r\"https://raw.githubusercontent.com/${1}/${2}/refs/heads/main/install.sh\")"
+          }
+        }
+      }
+    },
+    {
+      "action": "redirect",
+      "expression": "(http.user_agent contains \"PowerShell\" and http.request.uri wildcard r\"/*/*\")",
+      "description": "PowerShell → install.ps1",
+      "enabled": true,
+      "action_parameters": {
+        "from_value": {
+          "preserve_query_string": true,
+          "status_code": 302,
+          "target_url": {
+            "expression": "wildcard_replace(http.request.full_uri, r\"https://YOURDOMAIN.COM/*/*\", r\"https://raw.githubusercontent.com/${1}/${2}/refs/heads/main/install.ps1\")"
+          }
+        }
+      }
+    },
+    {
+      "action": "redirect",
+      "expression": "(http.request.uri wildcard r\"/*/*\")",
+      "description": "Browser → GitHub repo",
+      "enabled": true,
+      "action_parameters": {
+        "from_value": {
+          "preserve_query_string": true,
+          "status_code": 302,
+          "target_url": {
+            "expression": "wildcard_replace(http.request.full_uri, r\"https://YOURDOMAIN.COM/*/*\", r\"https://github.com/${1}/${2}/\")"
+          }
+        }
+      }
+    }
+  ]
+}'
+```
+
+> Replace `YOURDOMAIN.COM` with your actual domain in all three places.
+
+To list existing rules:
+
+```bash
+# First, find your ruleset ID
+curl -s "https://api.cloudflare.com/client/v4/zones/$ZONE_ID/rulesets" \
+  -H "X-Auth-Email: $CLOUDFLARE_EMAIL" \
+  -H "X-Auth-Key: $CLOUDFLARE_API_KEY" | jq '.result[] | select(.phase == "http_request_dynamic_redirect") | .id'
+
+# Then inspect the rules
+RULESET_ID="the-id-from-above"
+curl -s "https://api.cloudflare.com/client/v4/zones/$ZONE_ID/rulesets/$RULESET_ID" \
+  -H "X-Auth-Email: $CLOUDFLARE_EMAIL" \
+  -H "X-Auth-Key: $CLOUDFLARE_API_KEY" | jq '.result.rules[] | {description, expression}'
+```
+
 ### Why this matters
 
 - **Zero downtime** — There is no server to crash. Cloudflare's edge network handles everything. As long as Cloudflare is up, install.cat is up.
