@@ -346,6 +346,11 @@
       border-color: var(--accent);
     }
 
+    .generator-form input.invalid {
+      border-color: var(--syn-cmd) !important;
+      color: var(--syn-cmd);
+    }
+
     .generator-form button {
       padding: 0.75rem 1.5rem;
       font-size: 1rem;
@@ -1682,21 +1687,29 @@
     }
 
     function generateCommands(scroll = true) {
-      const input = document.getElementById('repo-input').value.trim();
+      const inputEl = document.getElementById('repo-input');
+      const input = inputEl.value.trim();
       const container = document.getElementById('generated-commands');
 
       if (!input) {
         container.classList.remove('visible');
+        inputEl.classList.remove('invalid');
         return;
       }
 
       const repo = extractRepo(input);
 
       if (!repo) {
+        if (scroll) {
+          inputEl.classList.add('invalid');
+        } else {
+          inputEl.classList.remove('invalid');
+        }
         container.classList.remove('visible');
         return;
       }
 
+      inputEl.classList.remove('invalid');
       const unixCmd = plainUnix(repo);
       const winCmd = `irm install.cat/${repo} | iex`;
 
