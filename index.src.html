@@ -1681,12 +1681,17 @@
       };
     }
 
-    function generateCommands(scroll = true) {
+    function generateCommands(scroll = true, updateUrl = true) {
       const input = document.getElementById('repo-input').value.trim();
       const container = document.getElementById('generated-commands');
 
       if (!input) {
         container.classList.remove('visible');
+        if (updateUrl) {
+          const url = new URL(window.location);
+          url.searchParams.delete('repo');
+          window.history.replaceState({}, '', url);
+        }
         return;
       }
 
@@ -1694,6 +1699,11 @@
 
       if (!repo) {
         container.classList.remove('visible');
+        if (updateUrl) {
+          const url = new URL(window.location);
+          url.searchParams.delete('repo');
+          window.history.replaceState({}, '', url);
+        }
         return;
       }
 
@@ -1708,6 +1718,12 @@
       document.getElementById('copy-win').setAttribute('data-copy', winCmd);
 
       container.classList.add('visible');
+
+      if (updateUrl) {
+        const url = new URL(window.location);
+        url.searchParams.set('repo', repo);
+        window.history.replaceState({}, '', url);
+      }
 
       if (scroll) {
         setTimeout(() => {
@@ -1745,20 +1761,28 @@
         document.getElementById('example-unix').innerHTML = highlightUnix(repo);
         const copyBtn = document.getElementById('example-unix').closest('.command-content').querySelector('.copy-btn');
         copyBtn.setAttribute('data-copy', plainUnix(repo));
-        generateCommands(false);
+        generateCommands(false, false);
       }
       document.getElementById('wget-toggle').addEventListener('change', updateUnixCommands);
 
       // Generator
-      document.getElementById('generate-btn').addEventListener('click', () => generateCommands(true));
-      document.getElementById('repo-input').addEventListener('input', debounce(() => generateCommands(false), 300));
+      document.getElementById('generate-btn').addEventListener('click', () => generateCommands(true, true));
+      document.getElementById('repo-input').addEventListener('input', debounce(() => generateCommands(false, true), 300));
       document.getElementById('repo-input').addEventListener('keypress', e => {
-        if (e.key === 'Enter') generateCommands(true);
+        if (e.key === 'Enter') generateCommands(true, true);
       });
 
-      // Pre-fill generator with example
-      document.getElementById('repo-input').value = 'verseles/xpm';
-      generateCommands(false);
+      // Pre-fill generator with example or url param
+      const urlParams = new URLSearchParams(window.location.search);
+      const urlRepo = urlParams.get('repo');
+
+      if (urlRepo && extractRepo(urlRepo)) {
+        document.getElementById('repo-input').value = extractRepo(urlRepo);
+        generateCommands(false, false);
+      } else {
+        document.getElementById('repo-input').value = 'verseles/xpm';
+        generateCommands(false, false);
+      }
     });
   </script>
 </body>
