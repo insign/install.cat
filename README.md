@@ -74,9 +74,9 @@ install.cat runs entirely on **Cloudflare Redirect Rules** — there is no serve
 
 | User-Agent | Redirect target |
 |---|---|
-| `curl` | `raw.githubusercontent.com/{user}/{repo}/refs/heads/main/install.sh` |
-| `wget` | `raw.githubusercontent.com/{user}/{repo}/refs/heads/main/install.sh` |
-| `PowerShell` | `raw.githubusercontent.com/{user}/{repo}/refs/heads/main/install.ps1` |
+| `curl` | `raw.githubusercontent.com/{user}/{repo}/HEAD/install.sh` |
+| `wget` | `raw.githubusercontent.com/{user}/{repo}/HEAD/install.sh` |
+| `PowerShell` | `raw.githubusercontent.com/{user}/{repo}/HEAD/install.ps1` |
 | `Android` | `install.cat/android.html?gh={user}/{repo}` (detects arch, finds APK) |
 | `iPhone` / `iPad` | `install.cat/ios.html?gh={user}/{repo}` (App Store / IPA sideload) |
 | Browser (default) | `github.com/{user}/{repo}/` |
@@ -154,7 +154,7 @@ curl -s -X POST "https://api.cloudflare.com/client/v4/zones/$ZONE_ID/rulesets" \
           "preserve_query_string": true,
           "status_code": 302,
           "target_url": {
-            "expression": "wildcard_replace(http.request.full_uri, r\"https://YOURDOMAIN.COM/*/*\", r\"https://raw.githubusercontent.com/${1}/${2}/refs/heads/main/install.sh\")"
+            "expression": "wildcard_replace(http.request.full_uri, r\"https://YOURDOMAIN.COM/*/*\", r\"https://raw.githubusercontent.com/${1}/${2}/HEAD/install.sh\")"
           }
         }
       }
@@ -169,7 +169,7 @@ curl -s -X POST "https://api.cloudflare.com/client/v4/zones/$ZONE_ID/rulesets" \
           "preserve_query_string": true,
           "status_code": 302,
           "target_url": {
-            "expression": "wildcard_replace(http.request.full_uri, r\"https://YOURDOMAIN.COM/*/*\", r\"https://raw.githubusercontent.com/${1}/${2}/refs/heads/main/install.sh\")"
+            "expression": "wildcard_replace(http.request.full_uri, r\"https://YOURDOMAIN.COM/*/*\", r\"https://raw.githubusercontent.com/${1}/${2}/HEAD/install.sh\")"
           }
         }
       }
@@ -184,7 +184,7 @@ curl -s -X POST "https://api.cloudflare.com/client/v4/zones/$ZONE_ID/rulesets" \
           "preserve_query_string": true,
           "status_code": 302,
           "target_url": {
-            "expression": "wildcard_replace(http.request.full_uri, r\"https://YOURDOMAIN.COM/*/*\", r\"https://raw.githubusercontent.com/${1}/${2}/refs/heads/main/install.ps1\")"
+            "expression": "wildcard_replace(http.request.full_uri, r\"https://YOURDOMAIN.COM/*/*\", r\"https://raw.githubusercontent.com/${1}/${2}/HEAD/install.ps1\")"
           }
         }
       }

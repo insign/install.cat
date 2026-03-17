@@ -353,7 +353,7 @@
 
       // Check if the repo has its own ios.html (full override)
       try {
-        const checkUrl = `https://raw.githubusercontent.com/${repo}/refs/heads/main/ios.html`;
+        const checkUrl = `https://raw.githubusercontent.com/${repo}/HEAD/ios.html`;
         const head = await fetch(checkUrl, { method: 'HEAD' });
         if (head.ok) {
           window.location.href = checkUrl;
@@ -365,7 +365,7 @@
 
       // Check if the repo has an ios.txt (custom URL redirect)
       try {
-        const txtUrl = `https://raw.githubusercontent.com/${repo}/refs/heads/main/ios.txt`;
+        const txtUrl = `https://raw.githubusercontent.com/${repo}/HEAD/ios.txt`;
         const txtRes = await fetch(txtUrl);
         if (txtRes.ok) {
           const url = (await txtRes.text()).trim().split('\n')[0].trim();
