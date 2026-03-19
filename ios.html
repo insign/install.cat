@@ -6,9 +6,9 @@ function findIpa(assets,repo){let repoName=repo.split(`/`)[1],ipas=assets.filter
 // Priority 3: any IPA at all
 return ipas.length?ipas.find(a=>a.name===`${repoName}-ios-arm64.ipa`)||ipas.find(a=>a.name.toLowerCase().includes(`ios`))||ipas[0]:null}async function main(){applyTranslations(detectLanguage());let repo=new URLSearchParams(window.location.search).get(`gh`);if(!repo||!repo.match(/^[a-zA-Z0-9_.-]+\/[a-zA-Z0-9_.-]+$/)){showError(`Invalid or missing ?gh=user/repo parameter`,null);return}
 // Check if the repo has its own ios.html (full override)
-try{let checkUrl=`https://raw.githubusercontent.com/${repo}/refs/heads/main/ios.html`;if((await fetch(checkUrl,{method:`HEAD`})).ok){window.location.href=checkUrl;return}}catch{}
+try{let checkUrl=`https://raw.githubusercontent.com/${repo}/HEAD/ios.html`;if((await fetch(checkUrl,{method:`HEAD`})).ok){window.location.href=checkUrl;return}}catch{}
 // Check if the repo has an ios.txt (custom URL redirect)
-try{let txtUrl=`https://raw.githubusercontent.com/${repo}/refs/heads/main/ios.txt`,txtRes=await fetch(txtUrl);if(txtRes.ok){let url=(await txtRes.text()).trim().split(`
+try{let txtUrl=`https://raw.githubusercontent.com/${repo}/HEAD/ios.txt`,txtRes=await fetch(txtUrl);if(txtRes.ok){let url=(await txtRes.text()).trim().split(`
 `)[0].trim();if(url){window.location.href=url;return}}}catch{}
 // Fetch latest release
 let releaseRes=await fetch(`https://api.github.com/repos/${repo}/releases/latest`).catch(()=>null);

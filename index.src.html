@@ -346,6 +346,11 @@
       border-color: var(--accent);
     }
 
+    .generator-form input.invalid {
+      border-color: var(--syn-cmd);
+      color: var(--syn-cmd);
+    }
+
     .generator-form button {
       padding: 0.75rem 1.5rem;
       font-size: 1rem;
@@ -1681,21 +1686,39 @@
       };
     }
 
+    function updateGeneratorUrl(repo) {
+      const url = new URL(window.location.href);
+      if (repo) {
+        url.searchParams.set('repo', repo);
+      } else {
+        url.searchParams.delete('repo');
+      }
+      window.history.replaceState({}, '', url);
+    }
+
     function generateCommands(scroll = true) {
-      const input = document.getElementById('repo-input').value.trim();
+      const inputEl = document.getElementById('repo-input');
+      const input = inputEl.value.trim();
       const container = document.getElementById('generated-commands');
 
       if (!input) {
+        inputEl.classList.remove('invalid');
         container.classList.remove('visible');
+        updateGeneratorUrl(null);
         return;
       }
 
       const repo = extractRepo(input);
 
       if (!repo) {
+        inputEl.classList.add('invalid');
         container.classList.remove('visible');
+        updateGeneratorUrl(null);
         return;
       }
+
+      inputEl.classList.remove('invalid');
+      updateGeneratorUrl(repo);
 
       const unixCmd = plainUnix(repo);
       const winCmd = `irm install.cat/${repo} | iex`;
@@ -1719,6 +1742,8 @@
     // Initialize
     document.addEventListener('DOMContentLoaded', () => {
       applyTranslations(detectLanguage());
+      const repoInput = document.getElementById('repo-input');
+      const prefilledRepo = new URLSearchParams(window.location.search).get('repo');
 
       // Copy buttons
       document.querySelectorAll('.copy-btn').forEach(btn => {
@@ -1751,13 +1776,16 @@
 
       // Generator
       document.getElementById('generate-btn').addEventListener('click', () => generateCommands(true));
-      document.getElementById('repo-input').addEventListener('input', debounce(() => generateCommands(false), 300));
-      document.getElementById('repo-input').addEventListener('keypress', e => {
+      repoInput.addEventListener('input', () => {
+        repoInput.classList.remove('invalid');
+      });
+      repoInput.addEventListener('input', debounce(() => generateCommands(false), 300));
+      repoInput.addEventListener('keypress', e => {
         if (e.key === 'Enter') generateCommands(true);
       });
 
-      // Pre-fill generator with example
-      document.getElementById('repo-input').value = 'verseles/xpm';
+      // Pre-fill generator from URL or example
+      repoInput.value = prefilledRepo || 'verseles/xpm';
       generateCommands(false);
     });
   </script>
