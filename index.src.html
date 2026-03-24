@@ -651,7 +651,7 @@
           </div>
         </div>
         <div class="ai-tip">
-          🤖 <span data-i18n="aiTip">Using AI? Just paste:</span> <code>Update @README.md to use https://install.cat (supports Linux, macOS, Windows, Android and iOS)</code>
+          🤖 <span data-i18n="aiTip">Using AI? Just paste:</span> <code id="ai-tip-code">Update @README.md to use https://install.cat (supports Linux, macOS, Windows, Android and iOS)</code>
         </div>
       </div>
     </section>
@@ -1700,11 +1700,13 @@
       const inputEl = document.getElementById('repo-input');
       const input = inputEl.value.trim();
       const container = document.getElementById('generated-commands');
+      const aiTipCode = document.getElementById('ai-tip-code');
 
       if (!input) {
         inputEl.classList.remove('invalid');
         container.classList.remove('visible');
         updateGeneratorUrl(null);
+        if (aiTipCode) aiTipCode.textContent = `Update @README.md to use https://install.cat (supports Linux, macOS, Windows, Android and iOS)`;
         return;
       }
 
@@ -1714,6 +1716,7 @@
         inputEl.classList.add('invalid');
         container.classList.remove('visible');
         updateGeneratorUrl(null);
+        if (aiTipCode) aiTipCode.textContent = `Update @README.md to use https://install.cat (supports Linux, macOS, Windows, Android and iOS)`;
         return;
       }
 
@@ -1729,6 +1732,7 @@
       document.getElementById('gen-ios').innerHTML = `<span class="syn-url">install.cat/${escapeHtml(repo)}</span> <span class="syn-flag">${(translations[detectLanguage()] || translations.en).iosAutoIpa}</span>`;
       document.getElementById('copy-unix').setAttribute('data-copy', unixCmd);
       document.getElementById('copy-win').setAttribute('data-copy', winCmd);
+      if (aiTipCode) aiTipCode.textContent = `Update @README.md to use https://install.cat/${repo} (supports Linux, macOS, Windows, Android and iOS)`;
 
       container.classList.add('visible');
 
