@@ -1765,6 +1765,7 @@
       });
 
       // wget toggle — update example and generator commands
+      const wgetToggle = document.getElementById('wget-toggle');
       function updateUnixCommands() {
         const repo = 'verseles/ask';
         document.getElementById('example-unix').innerHTML = highlightUnix(repo);
@@ -1772,7 +1773,20 @@
         copyBtn.setAttribute('data-copy', plainUnix(repo));
         generateCommands(false);
       }
-      document.getElementById('wget-toggle').addEventListener('change', updateUnixCommands);
+      wgetToggle.addEventListener('change', () => {
+        try {
+          localStorage.setItem('useWget', wgetToggle.checked);
+        } catch (e) {}
+        updateUnixCommands();
+      });
+
+      // Restore wget preference
+      try {
+        if (localStorage.getItem('useWget') === 'true') {
+          wgetToggle.checked = true;
+          updateUnixCommands();
+        }
+      } catch (e) {}
 
       // Generator
       document.getElementById('generate-btn').addEventListener('click', () => generateCommands(true));
