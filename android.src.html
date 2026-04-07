@@ -355,13 +355,22 @@
         // 404 or network error, proceed with default flow
       }
 
+      function isSafeRedirect(url) {
+        try {
+          const parsed = new URL(url, window.location.origin);
+          return !['javascript:', 'vbscript:', 'data:', 'blob:', 'file:'].includes(parsed.protocol);
+        } catch {
+          return false;
+        }
+      }
+
       // Check if the repo has an android.txt (custom URL redirect)
       try {
         const txtUrl = `https://raw.githubusercontent.com/${repo}/HEAD/android.txt`;
         const txtRes = await fetch(txtUrl);
         if (txtRes.ok) {
           const url = (await txtRes.text()).trim().split('\n')[0].trim();
-          if (url) {
+          if (url && isSafeRedirect(url)) {
             window.location.href = url;
             return;
           }
