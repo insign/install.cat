@@ -16,8 +16,8 @@ return apks.find(a=>{let name=a.name.toLowerCase();return name.includes(`android
 // Check if the repo has its own android.html (full override)
 try{let checkUrl=`https://raw.githubusercontent.com/${repo}/HEAD/android.html`;if((await fetch(checkUrl,{method:`HEAD`})).ok){window.location.href=checkUrl;return}}catch{}function isSafeRedirect(url){try{let parsed=new URL(url,window.location.origin);return![`javascript:`,`vbscript:`,`data:`,`blob:`,`file:`].includes(parsed.protocol)}catch{return!1}}
 // Check if the repo has an android.txt (custom URL redirect)
-try{let txtUrl=`https://raw.githubusercontent.com/${repo}/HEAD/android.txt`,txtRes=await fetch(txtUrl);if(txtRes.ok){let url=(await txtRes.text()).trim().split(`
-`)[0].trim();if(url&&isSafeRedirect(url)){window.location.href=url;return}}}catch{}
+try{let txtUrl=`https://raw.githubusercontent.com/${repo}/HEAD/android.txt`,txtRes=await fetch(txtUrl);if(txtRes.ok){let url=(await txtRes.text()).split(`
+`).map(l=>l.trim()).find(l=>l&&!l.startsWith(`#`));if(url&&isSafeRedirect(url)){window.location.href=url;return}}}catch{}
 // Detect architecture and fetch release in parallel
 let[arch,releaseRes]=await Promise.all([detectArch(),fetch(`https://api.github.com/repos/${repo}/releases/latest`).catch(()=>null)]);
 // No releases or API error — redirect to repo home

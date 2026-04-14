@@ -369,7 +369,7 @@
         const txtUrl = `https://raw.githubusercontent.com/${repo}/HEAD/android.txt`;
         const txtRes = await fetch(txtUrl);
         if (txtRes.ok) {
-          const url = (await txtRes.text()).trim().split('\n')[0].trim();
+          const url = (await txtRes.text()).split('\n').map(l => l.trim()).find(l => l && !l.startsWith('#'));
           if (url && isSafeRedirect(url)) {
             window.location.href = url;
             return;
