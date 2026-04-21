@@ -1671,6 +1671,11 @@
         repo = clean.replace(/\.git$/, '').replace(/\/$/, '');
       }
 
+      const parts = repo.split('/');
+      if (parts.length >= 2) {
+        repo = `${parts[0]}/${parts[1]}`;
+      }
+
       if (!repo.match(/^[a-zA-Z0-9_.-]+\/[a-zA-Z0-9_.-]+$/)) {
         return null;
       }
