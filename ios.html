@@ -5,12 +5,14 @@ function showFound(ipa,repo){document.getElementById(`loading`).classList.add(`h
 function findIpa(assets,repo){let repoName=repo.split(`/`)[1],ipas=assets.filter(a=>a.name.endsWith(`.ipa`));
 // Priority 3: any IPA at all
 return ipas.length?ipas.find(a=>a.name===`${repoName}-ios-arm64.ipa`)||ipas.find(a=>a.name.toLowerCase().includes(`ios`))||ipas[0]:null}async function main(){applyTranslations(detectLanguage());let repo=new URLSearchParams(window.location.search).get(`gh`);if(!repo||!repo.match(/^[a-zA-Z0-9_.-]+\/[a-zA-Z0-9_.-]+$/)){showError(`Invalid or missing ?gh=user/repo parameter`,null);return}
-// Check if the repo has its own ios.html (full override)
-try{let checkUrl=`https://raw.githubusercontent.com/${repo}/HEAD/ios.html`;if((await fetch(checkUrl,{method:`HEAD`})).ok){window.location.href=checkUrl;return}}catch{}function isSafeRedirect(url){try{let parsed=new URL(url,window.location.origin);return![`javascript:`,`vbscript:`,`data:`,`blob:`,`file:`].includes(parsed.protocol)}catch{return!1}}
-// Check if the repo has an ios.txt (custom URL redirect)
-try{let txtUrl=`https://raw.githubusercontent.com/${repo}/HEAD/ios.txt`,txtRes=await fetch(txtUrl);if(txtRes.ok){let url=(await txtRes.text()).split(`
-`).map(l=>l.trim()).find(l=>l&&!l.startsWith(`#`));if(url&&isSafeRedirect(url)){window.location.href=url;return}}}catch{}
-// Fetch latest release
-let releaseRes=await fetch(`https://api.github.com/repos/${repo}/releases/latest`).catch(()=>null);
+// Start all network requests in parallel
+let htmlUrl=`https://raw.githubusercontent.com/${repo}/HEAD/ios.html`,htmlPromise=fetch(htmlUrl,{method:`HEAD`}).catch(()=>null),txtUrl=`https://raw.githubusercontent.com/${repo}/HEAD/ios.txt`,txtPromise=fetch(txtUrl).catch(()=>null),releasesPromise=fetch(`https://api.github.com/repos/${repo}/releases/latest`).catch(()=>null);function isSafeRedirect(url){try{let parsed=new URL(url,window.location.origin);return![`javascript:`,`vbscript:`,`data:`,`blob:`,`file:`].includes(parsed.protocol)}catch{return!1}}
+// 1. Check if the repo has its own ios.html (full override)
+let head=await htmlPromise;if(head&&head.ok){window.location.href=htmlUrl;return}
+// 2. Check if the repo has an ios.txt (custom URL redirect)
+let txtRes=await txtPromise;if(txtRes&&txtRes.ok){let url=(await txtRes.text()).split(`
+`).map(l=>l.trim()).find(l=>l&&!l.startsWith(`#`));if(url&&isSafeRedirect(url)){window.location.href=url;return}}
+// 3. Fetch latest release
+let releaseRes=await releasesPromise;
 // No releases or API error — redirect to repo home
 if(!releaseRes||!releaseRes.ok){window.location.href=`https://github.com/${repo}`;return}let ipa=findIpa((await releaseRes.json()).assets||[],repo);ipa?showFound(ipa,repo):window.location.href=`https://github.com/${repo}`}main();</script>
