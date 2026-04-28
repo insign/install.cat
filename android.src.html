@@ -343,17 +343,16 @@
         return;
       }
 
-      // Check if the repo has its own android.html (full override)
-      try {
-        const checkUrl = `https://raw.githubusercontent.com/${repo}/HEAD/android.html`;
-        const head = await fetch(checkUrl, { method: 'HEAD' });
-        if (head.ok) {
-          window.location.href = checkUrl;
-          return;
-        }
-      } catch (e) {
-        // 404 or network error, proceed with default flow
-      }
+      // Start all network requests in parallel
+      const htmlUrl = `https://raw.githubusercontent.com/${repo}/HEAD/android.html`;
+      const htmlPromise = fetch(htmlUrl, { method: 'HEAD' }).catch(() => null);
+
+      const txtUrl = `https://raw.githubusercontent.com/${repo}/HEAD/android.txt`;
+      const txtPromise = fetch(txtUrl).catch(() => null);
+
+      const releasesPromise = fetch(`https://api.github.com/repos/${repo}/releases/latest`).catch(() => null);
+
+      const archPromise = detectArch();
 
       function isSafeRedirect(url) {
         try {
@@ -364,26 +363,26 @@
         }
       }
 
-      // Check if the repo has an android.txt (custom URL redirect)
-      try {
-        const txtUrl = `https://raw.githubusercontent.com/${repo}/HEAD/android.txt`;
-        const txtRes = await fetch(txtUrl);
-        if (txtRes.ok) {
-          const url = (await txtRes.text()).split('\n').map(l => l.trim()).find(l => l && !l.startsWith('#'));
-          if (url && isSafeRedirect(url)) {
-            window.location.href = url;
-            return;
-          }
-        }
-      } catch (e) {
-        // 404 or network error, proceed with default flow
+      // 1. Check if the repo has its own android.html (full override)
+      const head = await htmlPromise;
+      if (head && head.ok) {
+        window.location.href = htmlUrl;
+        return;
       }
 
-      // Detect architecture and fetch release in parallel
-      const [arch, releaseRes] = await Promise.all([
-        detectArch(),
-        fetch(`https://api.github.com/repos/${repo}/releases/latest`).catch(() => null)
-      ]);
+      // 2. Check if the repo has an android.txt (custom URL redirect)
+      const txtRes = await txtPromise;
+      if (txtRes && txtRes.ok) {
+        const txtBody = await txtRes.text();
+        const url = txtBody.split('\n').map(l => l.trim()).find(l => l && !l.startsWith('#'));
+        if (url && isSafeRedirect(url)) {
+          window.location.href = url;
+          return;
+        }
+      }
+
+      // 3. Detect architecture and fetch release
+      const [arch, releaseRes] = await Promise.all([archPromise, releasesPromise]);
 
       // No releases or API error — redirect to repo home
       if (!releaseRes || !releaseRes.ok) {
