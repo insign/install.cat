@@ -354,9 +354,12 @@
       // Check if the repo has its own ios.html (full override)
       try {
         const checkUrl = `https://raw.githubusercontent.com/${repo}/HEAD/ios.html`;
-        const head = await fetch(checkUrl, { method: 'HEAD' });
-        if (head.ok) {
-          window.location.href = checkUrl;
+        const res = await fetch(checkUrl);
+        if (res.ok) {
+          const html = await res.text();
+          document.open();
+          document.write(html);
+          document.close();
           return;
         }
       } catch (e) {
