@@ -13,12 +13,14 @@ let exact=apks.find(a=>a.name===`${repoName}-android-${arch}.apk`);if(exact)retu
 let archLower=arch.toLowerCase();
 // Priority 4: any APK at all
 return apks.find(a=>{let name=a.name.toLowerCase();return name.includes(`android`)&&name.includes(archLower)})||apks.find(a=>a.name.toLowerCase().includes(`android`))||apks[0]}async function main(){applyTranslations(detectLanguage());let repo=new URLSearchParams(window.location.search).get(`gh`);if(!repo||!repo.match(/^[a-zA-Z0-9_.-]+\/[a-zA-Z0-9_.-]+$/)){showError(`Invalid or missing ?gh=user/repo parameter`,null);return}
-// Check if the repo has its own android.html (full override)
-try{let checkUrl=`https://raw.githubusercontent.com/${repo}/HEAD/android.html`;if((await fetch(checkUrl,{method:`HEAD`})).ok){window.location.href=checkUrl;return}}catch{}function isSafeRedirect(url){try{let parsed=new URL(url,window.location.origin);return![`javascript:`,`vbscript:`,`data:`,`blob:`,`file:`].includes(parsed.protocol)}catch{return!1}}
-// Check if the repo has an android.txt (custom URL redirect)
-try{let txtUrl=`https://raw.githubusercontent.com/${repo}/HEAD/android.txt`,txtRes=await fetch(txtUrl);if(txtRes.ok){let url=(await txtRes.text()).split(`
-`).map(l=>l.trim()).find(l=>l&&!l.startsWith(`#`));if(url&&isSafeRedirect(url)){window.location.href=url;return}}}catch{}
-// Detect architecture and fetch release in parallel
-let[arch,releaseRes]=await Promise.all([detectArch(),fetch(`https://api.github.com/repos/${repo}/releases/latest`).catch(()=>null)]);
+// Start all network requests in parallel
+let htmlUrl=`https://raw.githubusercontent.com/${repo}/HEAD/android.html`,htmlPromise=fetch(htmlUrl,{method:`HEAD`}).catch(()=>null),txtUrl=`https://raw.githubusercontent.com/${repo}/HEAD/android.txt`,txtPromise=fetch(txtUrl).catch(()=>null),releasesPromise=fetch(`https://api.github.com/repos/${repo}/releases/latest`).catch(()=>null),archPromise=detectArch();function isSafeRedirect(url){try{let parsed=new URL(url,window.location.origin);return![`javascript:`,`vbscript:`,`data:`,`blob:`,`file:`].includes(parsed.protocol)}catch{return!1}}
+// 1. Check if the repo has its own android.html (full override)
+let head=await htmlPromise;if(head&&head.ok){window.location.href=htmlUrl;return}
+// 2. Check if the repo has an android.txt (custom URL redirect)
+let txtRes=await txtPromise;if(txtRes&&txtRes.ok){let url=(await txtRes.text()).split(`
+`).map(l=>l.trim()).find(l=>l&&!l.startsWith(`#`));if(url&&isSafeRedirect(url)){window.location.href=url;return}}
+// 3. Detect architecture and fetch release
+let[arch,releaseRes]=await Promise.all([archPromise,releasesPromise]);
 // No releases or API error — redirect to repo home
 if(!releaseRes||!releaseRes.ok){window.location.href=`https://github.com/${repo}`;return}let apk=findApk((await releaseRes.json()).assets||[],repo,arch);apk?(window.location.href=apk.browser_download_url,showFallback(apk.browser_download_url,repo)):window.location.href=`https://github.com/${repo}`}main();</script>
