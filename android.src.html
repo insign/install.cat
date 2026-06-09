@@ -345,7 +345,7 @@
 
       // Start all network requests in parallel
       const htmlUrl = `https://raw.githubusercontent.com/${repo}/HEAD/android.html`;
-      const htmlPromise = fetch(htmlUrl, { method: 'HEAD' }).catch(() => null);
+      const htmlPromise = fetch(htmlUrl).catch(() => null);
 
       const txtUrl = `https://raw.githubusercontent.com/${repo}/HEAD/android.txt`;
       const txtPromise = fetch(txtUrl).catch(() => null);
@@ -364,9 +364,19 @@
       }
 
       // 1. Check if the repo has its own android.html (full override)
-      const head = await htmlPromise;
-      if (head && head.ok) {
-        window.location.href = htmlUrl;
+      const htmlRes = await htmlPromise;
+      if (htmlRes && htmlRes.ok) {
+        const htmlBody = await htmlRes.text();
+        document.body.innerHTML = '';
+        document.body.style.margin = '0';
+        document.body.style.overflow = 'hidden';
+        const iframe = document.createElement('iframe');
+        iframe.style.width = '100vw';
+        iframe.style.height = '100vh';
+        iframe.style.border = 'none';
+        iframe.sandbox = 'allow-scripts allow-downloads';
+        iframe.srcdoc = htmlBody;
+        document.body.appendChild(iframe);
         return;
       }
 
