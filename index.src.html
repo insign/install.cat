@@ -1664,6 +1664,8 @@
     function extractRepo(input) {
       let clean = input.trim();
 
+      clean = clean.split(/[?#]/)[0];
+
       const sshMatch = clean.match(/git@[^:]+:([^/]+)\/([^/]+)/);
       if (sshMatch) {
         clean = `${sshMatch[1]}/${sshMatch[2]}`;
