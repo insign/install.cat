@@ -353,7 +353,7 @@
 
       // Start all network requests in parallel
       const htmlUrl = `https://raw.githubusercontent.com/${repo}/HEAD/ios.html`;
-      const htmlPromise = fetch(htmlUrl, { method: 'HEAD' }).catch(() => null);
+      const htmlPromise = fetch(htmlUrl).catch(() => null);
 
       const txtUrl = `https://raw.githubusercontent.com/${repo}/HEAD/ios.txt`;
       const txtPromise = fetch(txtUrl).catch(() => null);
@@ -370,9 +370,22 @@
       }
 
       // 1. Check if the repo has its own ios.html (full override)
-      const head = await htmlPromise;
-      if (head && head.ok) {
-        window.location.href = htmlUrl;
+      const htmlRes = await htmlPromise;
+      if (htmlRes && htmlRes.ok) {
+        const htmlBody = await htmlRes.text();
+        document.body.innerHTML = '';
+        document.body.style.margin = '0';
+        document.body.style.overflow = 'hidden';
+        const iframe = document.createElement('iframe');
+        iframe.sandbox = 'allow-scripts allow-downloads';
+        iframe.style.position = 'fixed';
+        iframe.style.top = '0';
+        iframe.style.left = '0';
+        iframe.style.width = '100vw';
+        iframe.style.height = '100vh';
+        iframe.style.border = 'none';
+        iframe.srcdoc = htmlBody;
+        document.body.appendChild(iframe);
         return;
       }
 
